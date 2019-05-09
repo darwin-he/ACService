@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../layui/layui.js"></script>
+
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="layui-anim layui-anim-up">
+<div class="x-body">
+
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+            <input id="start" class="layui-input" placeholder="开始日" name="start">
+            <input id="end" class="layui-input" placeholder="截止日" name="end">
+            <input id="userName" class="layui-input" placeholder="用户名" type="text" name="userName" autocomplete="off">
+            <input id="userCount" class="layui-input" placeholder="账&nbsp;号" type="text" name="userCount" autocomplete="off">
+            <input id="deviceName" class="layui-input" placeholder="设备名" type="text" name="deviceName" autocomplete="off">
+            <input id="deviceNumber" class="layui-input" placeholder="设备编号" type="text" name="deviceNumber" autocomplete="off">
+            <input id="state" class="layui-input" placeholder="状&nbsp;态1/0" type="text" name="state" autocomplete="off">
+            <button class="layui-btn"  lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+    </div>
+
+    <table id="usersInfTable" class="layui-tab" lay-filter="usersInfTable-Event"></table>
+
+    <script type="text/html" id="usersInfTable-ToolBar">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    </script>
+
+</div>
+<script>
+    //加载组件
+    layui.use(['element','table','form','layer','laydate'],function() {
+        element = layui.element;
+        table=layui.table;
+        form = layui.form;
+        layer = layui.layer;
+        laydate = layui.laydate;
+
+        //设置日期控件
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+
+        //初始化table
+        table.render({
+            elem: '#usersInfTable'
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
+                ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
+                ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
+                ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
+                ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
+                ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
+                ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
+                ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
+            ]]
+            ,url: "http://"+document.location.host+"/getRecords" //数据接口
+            ,parseData: function(res){ //res 即为原始返回的数据
+                if (res.code==0){
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": res.totalCount, //解析数据长度
+                        "data": res.data //解析数据列表
+                    }
+                }else {
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                    }
+                }
+            }
+        });
+
+        //监听form
+        form.on('submit(search)', function(data){
+            if (data.field.start!=""&&data.field.end!=""){
+                table.render({
+                    elem: '#usersInfTable'
+                    ,page: true //开启分页
+                    ,cols: [[ //表头
+                        {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
+                        ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
+                        ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
+                        ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
+                        ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
+                        ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
+                        ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
+                        ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
+                    ]]
+                    ,url: "http://"+document.location.host+"/getRecordsByDate" //数据接口
+                    ,where: { //设定异步数据接口的额外参数，任意设
+                        leftDate:data.field.start,
+                        rightDate:data.field.end
+                    }
+                    ,parseData: function(res){
+                        if (res.code==0){
+                            return {
+                                "code":res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.totalCount, //解析数据长度
+                                "data": res.data //解析数据列表
+                            }
+                        }else {
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg":res.msg, //解析提示文本
+                            }
+                        }
+                    }
+                });
+                return false;
+            }
+
+            if (data.field.userName!=""){
+                //所获得的 tableIns 即为当前容器的实例
+                table.render({
+                    elem: '#usersInfTable'
+                    ,page: true //开启分页
+                    ,cols: [[ //表头
+                        {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
+                        ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
+                        ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
+                        ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
+                        ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
+                        ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
+                        ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
+                        ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
+                    ]]
+                    ,url: "http://"+document.location.host+"/getRecordsByUserName" //数据接口
+                    ,where: { //设定异步数据接口的额外参数，任意设
+                        userName:data.field.userName
+                    }
+                    ,parseData: function(res){
+                        if (res.code==0){
+                            return {
+                                "code":res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.totalCount, //解析数据长度
+                                "data": res.data //解析数据列表
+                            }
+                        }else {
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg":res.msg, //解析提示文本
+                            }
+                        }
+                    }
+                });
+                return false;
+            }
+
+            if (data.field.userCount!=""){
+                table.render({
+                    elem: '#usersInfTable'
+                    ,page: true //开启分页
+                    ,cols: [[ //表头
+                        {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
+                        ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
+                        ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
+                        ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
+                        ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
+                        ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
+                        ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
+                        ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
+                    ]]
+                    ,url: "http://"+document.location.host+"/getRecordsByUserCount" //数据接口
+                    ,where: { //设定异步数据接口的额外参数，任意设
+                        userCount:data.field.userCount
+                    }
+                    ,parseData: function(res){
+                        if (res.code==0){
+                            return {
+                                "code":res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.totalCount, //解析数据长度
+                                "data": res.data//解析数据列表
+                            }
+                        }else {
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg":res.msg, //解析提示文本
+                            }
+                        }
+                    }
+                });
+                return false;
+            }
+
+            if (data.field.deviceName!=""){
+                //所获得的 tableIns 即为当前容器的实例
+                table.render({
+                    elem: '#usersInfTable'
+                    ,page: true //开启分页
+                    ,cols: [[ //表头
+                        {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
+                        ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
+                        ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
+                        ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
+                        ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
+                        ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
+                        ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
+                        ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
+                    ]]
+                    ,url: "http://"+document.location.host+"/getRecordsByDeviceName" //数据接口
+                    ,where: { //设定异步数据接口的额外参数，任意设
+                        deviceName:data.field.deviceName
+                    }
+                    ,parseData: function(res){
+                        if (res.code==0){
+                            return {
+                                "code":res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.totalCount, //解析数据长度
+                                "data": res.data //解析数据列表
+                            }
+                        }else {
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg":res.msg, //解析提示文本
+                            }
+                        }
+                    }
+                });
+                return false;
+            }
+
+            if (data.field.deviceNumber!=""){
+                //所获得的 tableIns 即为当前容器的实例
+                table.render({
+                    elem: '#usersInfTable'
+                    ,page: true //开启分页
+                    ,cols: [[ //表头
+                        {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
+                        ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
+                        ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
+                        ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
+                        ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
+                        ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
+                        ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
+                        ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
+                    ]]
+                    ,url: "http://"+document.location.host+"/getRecordsByDeviceNumber" //数据接口
+                    ,where: { //设定异步数据接口的额外参数，任意设
+                        deviceNumber:data.field.deviceNumber
+                    }
+                    ,parseData: function(res){
+                        if (res.code==0){
+                            return {
+                                "code":res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.totalCount, //解析数据长度
+                                "data": res.data //解析数据列表
+                            }
+                        }else {
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg":res.msg, //解析提示文本
+                            }
+                        }
+                    }
+                });
+                return false;
+            }
+
+            if (data.field.state!=""){
+                //所获得的 tableIns 即为当前容器的实例
+                table.render({
+                    elem: '#usersInfTable'
+                    ,page: true //开启分页
+                    ,cols: [[ //表头
+                        {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
+                        ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
+                        ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
+                        ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
+                        ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
+                        ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
+                        ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
+                        ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
+                    ]]
+                    ,url: "http://"+document.location.host+"/getRecordsByState" //数据接口
+                    ,where: { //设定异步数据接口的额外参数，任意设
+                        state:data.field.state
+                    }
+                    ,parseData: function(res){
+                        if (res.code==0){
+                            return {
+                                "code":res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.totalCount, //解析数据长度
+                                "data": res.data //解析数据列表
+                            }
+                        }else {
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg":res.msg, //解析提示文本
+                            }
+                        }
+                    }
+                });
+                return false;
+            }
+
+            table.render({
+                elem: '#usersInfTable'
+                ,page: true //开启分页
+                ,cols: [[ //表头
+                    {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
+                    ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
+                    ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
+                    ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
+                    ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
+                    ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
+                    ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
+                    ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
+                ]]
+                ,url: "http://"+document.location.host+"/getRecords" //数据接口
+                ,parseData: function(res){ //res 即为原始返回的数据
+                    if (res.code==0){
+                        return {
+                            "code": res.code, //解析接口状态
+                            "msg": res.msg, //解析提示文本
+                            "count": res.totalCount, //解析数据长度
+                            "data": res.data //解析数据列表
+                        }
+                    }else {
+                        return {
+                            "code": res.code, //解析接口状态
+                            "msg": res.msg, //解析提示文本
+                        }
+                    }
+                }
+            });
+            return false;
+        });
+
+        //监听table工具条事件
+        table.on('tool(usersInfTable-Event)',function (obj) {
+            var trData=obj.data;//获取当前行数据
+            var layEvent=obj.event;//获取lay-event对应的值
+            var tr=obj.tr;//获取当前行tr的DOM对象
+            if (layEvent=="delete"){
+                $.get("http://"+document.location.host+"/deleteRecordByPassId",{ passId:trData.passId},function (data,status) {
+                    if (status=='success'){
+                        if (data.code==0){
+                            obj.del();
+                        }
+                        alert(data.msg);
+                    } else {
+                        alert(status);
+                    }
+                });
+            }
+            return;
+        })
+    });
+</script>
+</body>
+
+</html>

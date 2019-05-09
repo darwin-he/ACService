@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>终端管理员登陆注册</title>
+
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+
+    <script src="js/admin/cookieTool.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="layui/layui.js"></script>
+</head>
+<body>
+<div id="wrapper" class="login-page">
+    <div id="login_form" class="form">
+        <form class="register-form">
+            <h2>管理员注册</h2>
+            <input type="text" placeholder="账&nbsp;&nbsp;号：" id="adminCount"/>
+            <input type="text" placeholder="用户名：" id="adminName"/>
+            <input type="password" placeholder="密&nbsp;&nbsp;码：" id="passWord"/>
+            <input type="password" placeholder="重复密码：" id="rePassWord"/>
+            <input type="text" placeholder="设备编号：" id="deviceNumber"/>
+            <button id="create">创&nbsp;&nbsp;建</button>
+            <p class="message">已有账户? <a href="#">立刻登录</a></p>
+        </form>
+
+        <form class="login-form">
+            <h2>管理员登录</h2>
+            <input type="text" placeholder="账  号：" id="l-adminCount"/>
+            <input type="password" placeholder="密  码：" id="l-passWord"/>
+            <button id="login">登&nbsp;&nbsp;录</button>
+            <p class="message">还没有账户? <a href="#">立刻创建</a></p>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    function check_login() {
+        var adminCount = $("#l-adminCount").val();
+        var passWord = $("#l-passWord").val();
+        if (adminCount.length!=11){
+            $("#login_form").removeClass('shake_effect');
+            setTimeout(function () {
+                $("#login_form").addClass('shake_effect')
+            }, 1);
+            alert("账户必须是11位数字")
+            return;
+        }
+        if (passWord.length<6||passWord.length>16){
+            $("#login_form").removeClass('shake_effect');
+            setTimeout(function () {
+                $("#login_form").addClass('shake_effect')
+            }, 1);
+            alert("密码必须是6-16字符")
+            return;
+        }
+
+        //异步请求服务器验证密码
+        $.ajax({
+            type: "POST",
+            url: "http://"+document.location.host+"/adminLogin",
+            // contentType: "application/json; charset=utf-8",
+            data: {"adminCount":adminCount,"passWord":passWord},
+            dataType: "json",
+            success: function (data) {
+                if (data.code==0){
+                    setCookie("rfidAdmin",JSON.stringify(data.data));
+                    $("#l-adminCount").val("");
+                    $("#l-passWord").val("");
+                    $(location).attr('href', 'html/adminHome.html');
+                }else {
+                   alert(data.msg);
+                }
+            },
+            error: function (message) {
+                alert(message);
+            }
+        });
+        return;
+    }
+
+    function check_register() {
+        var adminCount = $("#adminCount").val();
+        var adminName=$('#adminName').val();
+        var passWord = $("#passWord").val();
+        var rePassWord=$("#rePassWord").val();
+        var deviceNumber=$('#deviceNumber').val();
+        if (adminCount.length!=11){
+            $("#login_form").removeClass('shake_effect');
+            setTimeout(function () {
+                $("#login_form").addClass('shake_effect')
+            }, 1);
+            alert("账户必须是11位数字")
+            return;
+        }
+        if (adminName.length<2){
+            $("#login_form").removeClass('shake_effect');
+            setTimeout(function () {
+                $("#login_form").addClass('shake_effect')
+            }, 1);
+            alert("用户名至少两个字符");
+            return;
+        }
+
+        if (passWord.length<6||passWord.length>16){
+            $("#login_form").removeClass('shake_effect');
+            setTimeout(function () {
+                $("#login_form").addClass('shake_effect')
+            }, 1);
+            alert("密码长度应为6-16个字符");
+            return;
+        }
+
+        if (passWord!=rePassWord){
+            $("#login_form").removeClass('shake_effect');
+            setTimeout(function () {
+                $("#login_form").addClass('shake_effect')
+            }, 1);
+            alert("重复密码与密码不一致");
+            return;
+        }
+
+        if (deviceNumber.length!=11){
+            $("#login_form").removeClass('shake_effect');
+            setTimeout(function () {
+                $("#login_form").addClass('shake_effect')
+            }, 1);
+            alert("设备编号必须为11位数字");
+            return;
+        }
+
+        var sendData={"adminCount":adminCount,"adminName":adminName,"passWord":passWord,"deviceNumber":deviceNumber};
+        //异步请求服务器验证密码
+        $.ajax({
+            type: "POST",
+            url: "http://"+document.location.host+"/addAdmin",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(sendData),
+            dataType: "json",
+            success: function (data) {
+                if (data.code==0){
+                    $("#adminCount").val("");
+                    $('#adminName').val("");
+                    $("#passWord").val("");
+                    $("#rePassWord").val("");
+                    $('#deviceNumber').val("");
+
+                }
+                alert(data.msg)
+            },
+            error: function (message) {
+                alert(message)
+            }
+        });
+        return;
+    }
+
+    $(document).ready(function () {
+
+        $("#create").click(function () {
+            check_register();
+            return false;
+        })
+        $("#login").click(function () {
+            check_login();
+            return false;
+        })
+        $('.message a').click(function () {
+            $('form').animate({
+                height: 'toggle',
+                opacity: 'toggle'
+            }, 'slow');
+        });
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>管理员资料</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="../js/admin/cookieTool.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../layui/layui.js"></script>
+
+    <!--    <script type="text/javascript" src="../../static/js/xadmin.js"></script>-->
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="layui-bg-black" style="overflow-x: hidden;overflow-y: hidden">
+
+    <div class="layui-row" id="adminImageDiv"style="margin-top: 10px">
+        <div class="layui-col-xs12 "style="text-align: center">
+            <div class="layui-col-xs12" style="text-align: center">
+                <img id="adminHeadImg" src="http://image3.suning.cn/uimg/b2c/newcatentries/0070183678-000000010180639122_3_800x800.jpg" class="layui-circle" width="60px" height="60px">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="layui-row" style="margin-top: 15px;">
+        <div class="layui-col-xs12 "style="text-align: center">
+            <div class="layui-col-xs6 "style="text-align: center">
+                账&nbsp;&nbsp;号
+            </div>
+            <div id="adminCount" class="layui-col-xs6"style="text-align: center">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-row" style="margin-top: 10px;">
+        <div class="layui-col-xs12 "style="text-align: center">
+            <div class="layui-col-xs6"style="text-align: center">
+                用户名
+            </div>
+            <div id="adminName" class="layui-col-xs6"style="text-align: center">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-row" style="margin-top: 10px;">
+        <div class="layui-col-xs12 "style="text-align: center">
+            <div class="layui-col-xs6 "style="text-align: center">
+                状&nbsp;&nbsp;态
+            </div>
+            <div id="state" class="layui-col-xs6 "style="text-align: center">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-row" style="margin-top: 10px;">
+        <div class="layui-col-xs12 "style="text-align: center">
+            <div class="layui-col-xs6 "style="text-align: center">
+                设备号
+            </div>
+            <div id="deviceNumber" class="layui-col-xs6 "style="text-align: center">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-row" style="margin-top: 10px;">
+        <div class="layui-col-xs12 "style="text-align: center">
+            <div class="layui-col-xs6 "style="text-align: center">
+                区&nbsp;&nbsp;域
+            </div>
+            <div id="location" class="layui-col-xs6 "style="text-align: center">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-row" style="margin-top: 10px;">
+        <div class="layui-col-xs12 "style="text-align: center">
+            <div class="layui-col-xs6 "style="text-align: center">
+                小&nbsp;&nbsp;区
+            </div>
+            <div id="community" class="layui-col-xs6 "style="text-align: center">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-row" style="margin-top: 10px;">
+        <div class="layui-col-xs12 "style="text-align: center">
+            <div class="layui-col-xs6 "style="text-align: center">
+                注册时间
+            </div>
+            <div id="registerTime" class="layui-col-xs6 "style="text-align: center">
+            </div>
+        </div>
+    </div>
+
+<script>
+    $(document).ready(function () {
+        rfidAdmin=JSON.parse(getCookie("rfidAdmin"));
+        if (rfidAdmin==null){
+            window.location.href="http://"+document.location.host+"/index.html";
+            return;
+        }
+        console.log(rfidAdmin);
+        $('#adminName').text(rfidAdmin.adminName);
+        $('#adminCount').text(rfidAdmin.adminCount);
+        $('#deviceNumber').text(rfidAdmin.deviceNumber);
+        $('#location').text(rfidAdmin.province+" "+rfidAdmin.city+" "+rfidAdmin.county);
+        $('#community').text(rfidAdmin.community);
+        $('#registerTime').text(rfidAdmin.registerTime);
+        if (rfidAdmin.state=="1")
+            $('#state').text('可用');
+        else
+            $('#state').text('禁用');
+    });
+</script>
+</body>
+</html>
