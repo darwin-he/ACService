@@ -1,7 +1,8 @@
 package com.admin.websocket;
 
 import com.admin.service.UserInfService;
-import com.admin.utils.CommonResult;
+import com.admin.websocket.msgdefin.CodeEnum;
+import com.admin.websocket.msgdefin.MsgResult;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * \* Created with IntelliJ IDEA.
@@ -27,31 +31,30 @@ public class WebSocketServer {
     
     @Autowired
     private UserInfService userService;
+    
+    private static final String SERVICE_ID="LocalService";
+    
     //日志工具
     private static final Logger log = LoggerFactory.getLogger(WebSocketServer.class);
     
-    //硬件设备
-    private static Session clientSession;
-    
-    //管理员网页客服端
-    private static Session adminClient;
-
-    /**
- 　　* 连接建立成功时方法
- 　　 */
-    @OnOpen
-    public static void onOpen(Session session){
-        clientSession = session;
-        log.info("onOpen"+session.getId());
-    }
+    //客户端列表
+    private static Map<String,Session> clients=new HashMap<>();
     
     /**
      * 连接断开时调用的方法
      */
     @OnClose
     public static void onClose(Session session) {
-        log.info("客户端断开连接："+clientSession.getId());
-        clientSession=null;
+        log.info("客户端断开连接："+session.getId());
+        
+        Iterator<Map.Entry<String, Session>> clientMap = clients.entrySet().iterator();
+        while (clientMap.hasNext()) {
+            Map.Entry<String, Session> entry = clientMap.next();
+            if (entry.getValue().equals(session)){
+                clientMap.remove();
+            }
+        }
+        
     }
 
     /**
@@ -60,12 +63,44 @@ public class WebSocketServer {
      */
     @OnMessage
     public static void onMessage(String message, Session session) {
-        log.info("收到客服端消息:" + message);
-        CommonResult commonResult= JSON.parseObject(message).toJavaObject(CommonResult.class);
-        if (commonResult.getCode()==DeviceCodeEnum.GET_USERINFOR.getCode()){
-            CommonResult sendData=new CommonResult(DeviceCodeEnum.GET_USERINFOR_SUCCEDSS.getCode(),DeviceCodeEnum.GET_USERINFOR_SUCCEDSS.getMsg());
-            String sendString=JSON.toJSONString(sendData);
-            sendMessage(sendString);
+        log.info("收到客户端消息:" + message);
+        //解析数据
+        MsgResult msgResult;
+        try {
+            msgResult= JSON.parseObject(message).toJavaObject(MsgResult.class);
+        }catch (Exception e){
+            return;
+        }
+        if (SERVICE_ID.equals(msgResult.getMsgRoute().getTo())){
+            decodeServiceMsg(msgResult,session);
+        }else {
+            Session sessionTo=clients.get(msgResult.getMsgRoute().getTo());
+            if (sessionTo!=null){
+                sendMessage(message,sessionTo);
+            }
+        }
+    }
+
+    /**
+    * 处理发送给服务器的消息
+    * @param msgResult
+    * @param session
+    */
+    private static void decodeServiceMsg(MsgResult msgResult, Session session) {
+        int code=msgResult.getCode();
+        if (code== CodeEnum.GET_USERINFOR.getCode()){
+            //获取用户信息
+            MsgResult sendData=new MsgResult(msgResult.getMsgRoute(),CodeEnum.GET_USERINFOR_SUCCEDSS.getCode(), CodeEnum.GET_USERINFOR_SUCCEDSS.getMsg());
+            sendMessage(sendData,session);
+        }else if (code== CodeEnum.UPDATE_IDENTITY_INFOR.getCode()){//上传身份信息
+            log.info("添加会话:" + session.getId());
+            //上传身份信息成功(管理和设备都会上传身份信息来建立连接)保存到会话列表
+            clients.put(msgResult.getMsgRoute().getFrom(),session);
+            MsgResult sendData=new MsgResult(msgResult.getMsgRoute(),CodeEnum.UPDATE_IDENTITY_INFOR_SUCCESS.getCode(), CodeEnum.GET_USERINFOR_SUCCEDSS.getMsg());
+            sendMessage(sendData,session);
+        }else if (code== CodeEnum.UPDATE_ENVIRODATE.getCode()){//上传环境数据
+            //保存环境数据到数据库
+            
         }
     }
 
@@ -75,22 +110,34 @@ public class WebSocketServer {
     @OnError
     public static void onError(Session session,Throwable error){
         log.info("发生错误："+session.getId()+"："+error.getMessage());
-        error.printStackTrace();
+        Iterator<Map.Entry<String, Session>> clientMap = clients.entrySet().iterator();
+        while (clientMap.hasNext()) {
+            Map.Entry<String, Session> entry = clientMap.next();
+            if (entry.getValue().equals(session)){
+                clientMap.remove();
+            }
+        }
     }
 
     /**
      * 发送消息给客户端
-     * @param message
+     * @param msgResult
      * @return
      */
-    public static Object sendMessage(String message)  {
-        if (clientSession==null)
-            return new CommonResult(-1,"设备未连接",message);
+    private static void sendMessage(MsgResult msgResult,Session session)  {
+        String sendString=JSON.toJSONString(msgResult);
         try {
-            clientSession.getBasicRemote().sendText(message);
-            return new CommonResult(-1,"指令发送成功",message);
+            session.getBasicRemote().sendText(sendString);
         } catch (Exception e) {
-            return new CommonResult(-1,e.toString(),message);
+            e.printStackTrace();
+        }
+    }
+    
+    private static void sendMessage(String msg,Session session){
+        try {
+            session.getBasicRemote().sendText(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     

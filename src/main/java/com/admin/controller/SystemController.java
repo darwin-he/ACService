@@ -3,7 +3,7 @@ package com.admin.controller;
 import com.admin.model.Admin;
 import com.admin.model.Card;
 import com.admin.ov.Location;
-import com.admin.service.AdminService;
+import com.admin.service.SystemService;
 import com.admin.utils.CommonResult;
 import com.admin.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
  * @date 2019/5/6 16:24
  */
 @Controller
-public class AdminController {
+public class SystemController {
 	@Autowired
-	private AdminService adminService;
+	private SystemService adminService;
 	
 	@ResponseBody
 	@RequestMapping(value = "/adminLogin",method = RequestMethod.POST)
@@ -40,6 +40,12 @@ public class AdminController {
 		admin.setRegisterTime(TimeUtil.getCurrentTime());
 		return adminService.addAdmin(admin);
 	}
+
+	@ResponseBody
+	@RequestMapping(value = "/deleteAdmin",method = RequestMethod.GET)
+	public Object deleteAdmin(String superAdminCount,String passWord,int adminId){
+		return null;
+	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/modifyAdminPassWord",method = RequestMethod.GET)
@@ -55,9 +61,4 @@ public class AdminController {
 		return new CommonResult(0,"卡片读取成功！",card);
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = "/openDoor",method = RequestMethod.GET)
-	public Object openDoor(){
-		return null;
-	}
 }

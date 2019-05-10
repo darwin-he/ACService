@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 public class UserInfController {
+	
 	@Autowired
 	private UserInfService userInfService;
 	

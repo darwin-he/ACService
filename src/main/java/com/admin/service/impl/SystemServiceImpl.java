@@ -1,11 +1,10 @@
 package com.admin.service.impl;
 
-import com.admin.dao.AdminDao;
+import com.admin.dao.SystemDao;
 import com.admin.model.Admin;
 import com.admin.ov.Location;
-import com.admin.service.AdminService;
+import com.admin.service.SystemService;
 import com.admin.utils.CommonResult;
-import com.admin.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,9 @@ import org.springframework.stereotype.Service;
  * @date 2019/5/7 0:45
  */
 @Service
-public class AdminServiceImpl implements AdminService {
+public class SystemServiceImpl implements SystemService {
 	@Autowired
-	private AdminDao adminDao;
+	private SystemDao adminDao;
 
 	@Override
 	public Object getLocation() {

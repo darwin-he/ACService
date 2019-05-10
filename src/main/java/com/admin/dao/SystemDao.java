@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @Mapper
 @Component
-public interface AdminDao {
+public interface SystemDao {
 	
 	@Select({"select province,city,county,community from admins where adminCount = '00000000000'"})
 	Location getLocation();

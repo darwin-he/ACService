@@ -1,4 +1,4 @@
-package com.admin.websocket;
+package com.admin.websocket.msgdefin;
 
 /**
  * \* Created with IntelliJ IDEA.
@@ -8,7 +8,7 @@ package com.admin.websocket;
  * \* Description:
  * \
  */
-public enum DeviceCodeEnum {
+public enum CodeEnum {
     SUCCESS(0,    "成功！"),
     DEFALUT(-1,"失败！"),
     OPENDOOR(2,"开门！"),
@@ -26,9 +26,9 @@ public enum DeviceCodeEnum {
     UPDATE_CARD(15,"上传卡片数据!"),
     UPDATE_CARD_DEFAULT(16,"上传卡片数据失败！"),
     UPDATE_CARD_SUCCESS(17,"上传卡片数据成功！"),
-    UPDATE_DEVICE_INFOR(18,"上传设备信息！"),
-    UPDATE_DEVICE_INFOR_DEFAULT(19,"上传设备信息失败！"),
-    UPDATE_DEVICE_INFOR_SUCCESS(20,"上传设备信息成功！"),
+    UPDATE_IDENTITY_INFOR(18,"上传身份信息！"),
+    UPDATE_IDENTITY_INFOR_DEFAULT(19,"上传身份信息失败！"),
+    UPDATE_IDENTITY_INFOR_SUCCESS(20,"上传身份信息成功！"),
     UPDATE_ENVIRODATE(21,"上传环境数据！"),
     UPDATE_ENVIRODATE_DEFAULT(22,"上传环境数据失败！"),
     UPDATA_ENVIRODATE_SUCCESS(23,"上传环境数据成功！"),
@@ -41,30 +41,30 @@ public enum DeviceCodeEnum {
     GET_USERINFOR(30,"获取用户信息！"),
     GET_USERINFOR_DEFAULT(31,"获取用户信息失败！"),
     GET_USERINFOR_SUCCEDSS(32,"获取用户信息成功！");
-    
-    private final int code;
-    private final String msg;
 
-    DeviceCodeEnum(int _code, String _msg){
-        this.code = _code;
-        this.msg = _msg;
-    }
+private final int code;
+private final String msg;
 
-    public int getCode() {
-        return code;
-    }
+CodeEnum(int _code, String _msg){
+    this.code = _code;
+    this.msg = _msg;
+}
 
-    public String getMsg() {
-        return msg;
-    }
+public int getCode() {
+    return code;
+}
 
-    public static String getMsgByCode(int code){
-        for(DeviceCodeEnum _enum : values()){
-            if(_enum.getCode() == code){
-                return _enum.getMsg();
-            }
+public String getMsg() {
+    return msg;
+}
+
+public static String getMsgByCode(int code){
+    for(CodeEnum _enum : values()){
+        if(_enum.getCode() == code){
+            return _enum.getMsg();
         }
-        return null;
     }
+    return null;
+}
 
 }
