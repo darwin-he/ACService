@@ -12,11 +12,15 @@ public interface RecordService {
 	
 	Object addRecord(Record record);
 	
-	Object deleteRecordByPassId(int passId);
+	Object deleteRecordById(int id);
+	
+	Object getAllRecordCount();
+	
+	Object getRecordCountByDeviceNumber(String deviceNumber);
 	
 	Object getRecords(int page,int limit);
 	
-	Object getRecordsByUserCount(String userCount,int page,int limit);
+	Object getRecordsByUserAccount(String userAccount,int page,int limit);
 	
 	Object getRecordsByUserName(String userName,int page,int limit);
 	
@@ -24,7 +28,7 @@ public interface RecordService {
 
 	Object getRecordsByDeviceName(String deviceName,int page,int limit);
 	
-	Object getRecordsByState(char state,int page,int limit);
+	Object getRecordsByState(String state,int page,int limit);
 	
 	Object getRecordsByDate(String leftDate,String rightDate,int page,int limit);
 }

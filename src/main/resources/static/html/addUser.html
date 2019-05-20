@@ -31,7 +31,7 @@
                 <span class="x-red">*</span>账&nbsp;&nbsp;号
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="userCount" name="userCount" required lay-verify="account|number"
+                <input type="text" id="userCount" name="account" required lay-verify="account|number"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -41,7 +41,7 @@
                 <span class="x-red">*</span>用户名
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="userName" name="userName" required lay-verify="name"
+                <input type="text" id="userName" name="name" required lay-verify="name"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -71,7 +71,7 @@
                 <span class="x-red">*</span>卡&nbsp;&nbsp;号
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="userCard" name="userCard" required lay-verify="card"
+                <input type="text" id="userCard" name="cardNumber" required lay-verify="card"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -88,13 +88,12 @@
 </body>
 
 <script>
-    var layer,form;
     $(document).ready(function () {
         //页面初始化
-        layui.use(['form','layer'], function(){
-            form = layui.form,
+        layui.use(['element','form','layer'], function(){
+            element=layui.element;
+            form = layui.form;
             layer = layui.layer;
-
             //自定义验证规则
             form.verify({
                 account:function (value) {
@@ -129,44 +128,15 @@
                     data: JSON.stringify(data.field),
                     dataType: "json",
                     success: function (data) {
-                        layer.alert(data.msg, {icon: 6},function () {
-                            // 获得frame索引
-                            var index = parent.layer.getFrameIndex(window.name);
-                            //关闭当前frame
-                            parent.layer.close(index);
-                        });
+                        layer.msg(data.msg);
                     },
                     error: function (message) {
-                        layer.alert(message, {icon: 6},function () {
-                            // 获得frame索引
-                            var index = parent.layer.getFrameIndex(window.name);
-                            //关闭当前frame
-                            parent.layer.close(index);
-                        });
+                        layer.msg(message);
                     }
                 });
                 return false;
             });
-            //读取卡片号
-            readCard();
         });
     });
-
-    /**
-     * 读取待注册的卡片号
-     */
-    function readCard() {
-        $.get("http://"+document.location.host+"/readCardNumber",function (data,status) {
-            if (status=='success'){
-                if (data.code==0){
-                    $("#userCard").attr("value",data.data.cardNumber);
-                } else {
-                    alert(data.msg);
-                }
-            } else {
-                alert(status);
-            }
-        });
-    }
 </script>
 </html>

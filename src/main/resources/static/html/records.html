@@ -28,10 +28,10 @@
             <input id="start" class="layui-input" placeholder="开始日" name="start">
             <input id="end" class="layui-input" placeholder="截止日" name="end">
             <input id="userName" class="layui-input" placeholder="用户名" type="text" name="userName" autocomplete="off">
-            <input id="userCount" class="layui-input" placeholder="账&nbsp;号" type="text" name="userCount" autocomplete="off">
+            <input id="userCount" class="layui-input" placeholder="账&nbsp;号" type="text" name="userAccount" autocomplete="off">
             <input id="deviceName" class="layui-input" placeholder="设备名" type="text" name="deviceName" autocomplete="off">
             <input id="deviceNumber" class="layui-input" placeholder="设备编号" type="text" name="deviceNumber" autocomplete="off">
-            <input id="state" class="layui-input" placeholder="状&nbsp;态1/0" type="text" name="state" autocomplete="off">
+            <input id="state" class="layui-input" placeholder="状态:进/出" type="text" name="state" autocomplete="off">
             <button class="layui-btn"  lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
@@ -39,7 +39,7 @@
     <table id="usersInfTable" class="layui-tab" lay-filter="usersInfTable-Event"></table>
 
     <script type="text/html" id="usersInfTable-ToolBar">
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除记录</a>
     </script>
 
 </div>
@@ -65,8 +65,8 @@
             elem: '#usersInfTable'
             ,page: true //开启分页
             ,cols: [[ //表头
-                {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
-                ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
+                {field: 'id', title: 'ID',width:'8%',align:'center',sort: true}
+                ,{field: 'userAccount', title: '账号',width:'14%',align:'center',}
                 ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
                 ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
                 ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
@@ -95,20 +95,8 @@
         //监听form
         form.on('submit(search)', function(data){
             if (data.field.start!=""&&data.field.end!=""){
-                table.render({
-                    elem: '#usersInfTable'
-                    ,page: true //开启分页
-                    ,cols: [[ //表头
-                        {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
-                        ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
-                        ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
-                        ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
-                        ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
-                        ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
-                        ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
-                        ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
-                    ]]
-                    ,url: "http://"+document.location.host+"/getRecordsByDate" //数据接口
+                table.reload("usersInfTable",{
+                    url: "http://"+document.location.host+"/getRecordsByDate" //数据接口
                     ,where: { //设定异步数据接口的额外参数，任意设
                         leftDate:data.field.start,
                         rightDate:data.field.end
@@ -134,20 +122,8 @@
 
             if (data.field.userName!=""){
                 //所获得的 tableIns 即为当前容器的实例
-                table.render({
-                    elem: '#usersInfTable'
-                    ,page: true //开启分页
-                    ,cols: [[ //表头
-                        {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
-                        ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
-                        ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
-                        ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
-                        ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
-                        ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
-                        ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
-                        ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
-                    ]]
-                    ,url: "http://"+document.location.host+"/getRecordsByUserName" //数据接口
+                table.reload("usersInfTable",{
+                    url: "http://"+document.location.host+"/getRecordsByUserName" //数据接口
                     ,where: { //设定异步数据接口的额外参数，任意设
                         userName:data.field.userName
                     }
@@ -170,23 +146,11 @@
                 return false;
             }
 
-            if (data.field.userCount!=""){
-                table.render({
-                    elem: '#usersInfTable'
-                    ,page: true //开启分页
-                    ,cols: [[ //表头
-                        {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
-                        ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
-                        ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
-                        ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
-                        ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
-                        ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
-                        ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
-                        ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
-                    ]]
-                    ,url: "http://"+document.location.host+"/getRecordsByUserCount" //数据接口
+            if (data.field.userAccount!=""){
+                table.reload("usersInfTable",{
+                    url: "http://"+document.location.host+"/getRecordsByUserAccount" //数据接口
                     ,where: { //设定异步数据接口的额外参数，任意设
-                        userCount:data.field.userCount
+                        userAccount:data.field.userAccount
                     }
                     ,parseData: function(res){
                         if (res.code==0){
@@ -209,20 +173,8 @@
 
             if (data.field.deviceName!=""){
                 //所获得的 tableIns 即为当前容器的实例
-                table.render({
-                    elem: '#usersInfTable'
-                    ,page: true //开启分页
-                    ,cols: [[ //表头
-                        {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
-                        ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
-                        ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
-                        ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
-                        ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
-                        ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
-                        ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
-                        ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
-                    ]]
-                    ,url: "http://"+document.location.host+"/getRecordsByDeviceName" //数据接口
+                table.reload("usersInfTable",{
+                    url: "http://"+document.location.host+"/getRecordsByDeviceName" //数据接口
                     ,where: { //设定异步数据接口的额外参数，任意设
                         deviceName:data.field.deviceName
                     }
@@ -247,20 +199,8 @@
 
             if (data.field.deviceNumber!=""){
                 //所获得的 tableIns 即为当前容器的实例
-                table.render({
-                    elem: '#usersInfTable'
-                    ,page: true //开启分页
-                    ,cols: [[ //表头
-                        {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
-                        ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
-                        ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
-                        ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
-                        ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
-                        ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
-                        ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
-                        ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
-                    ]]
-                    ,url: "http://"+document.location.host+"/getRecordsByDeviceNumber" //数据接口
+                table.reload("usersInfTable",{
+                    url: "http://"+document.location.host+"/getRecordsByDeviceNumber" //数据接口
                     ,where: { //设定异步数据接口的额外参数，任意设
                         deviceNumber:data.field.deviceNumber
                     }
@@ -285,20 +225,8 @@
 
             if (data.field.state!=""){
                 //所获得的 tableIns 即为当前容器的实例
-                table.render({
-                    elem: '#usersInfTable'
-                    ,page: true //开启分页
-                    ,cols: [[ //表头
-                        {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
-                        ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
-                        ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
-                        ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
-                        ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
-                        ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
-                        ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
-                        ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
-                    ]]
-                    ,url: "http://"+document.location.host+"/getRecordsByState" //数据接口
+                table.reload("usersInfTable",{
+                    url: "http://"+document.location.host+"/getRecordsByState" //数据接口
                     ,where: { //设定异步数据接口的额外参数，任意设
                         state:data.field.state
                     }
@@ -321,20 +249,8 @@
                 return false;
             }
 
-            table.render({
-                elem: '#usersInfTable'
-                ,page: true //开启分页
-                ,cols: [[ //表头
-                    {field: 'passId', title: 'ID',width:'8%',align:'center',sort: true}
-                    ,{field: 'userCount', title: '账号',width:'14%',align:'center',}
-                    ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
-                    ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
-                    ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
-                    ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
-                    ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
-                    ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
-                ]]
-                ,url: "http://"+document.location.host+"/getRecords" //数据接口
+            table.reload("usersInfTable",{
+                url: "http://"+document.location.host+"/getRecords" //数据接口
                 ,parseData: function(res){ //res 即为原始返回的数据
                     if (res.code==0){
                         return {
@@ -351,6 +267,7 @@
                     }
                 }
             });
+
             return false;
         });
 
@@ -360,15 +277,19 @@
             var layEvent=obj.event;//获取lay-event对应的值
             var tr=obj.tr;//获取当前行tr的DOM对象
             if (layEvent=="delete"){
-                $.get("http://"+document.location.host+"/deleteRecordByPassId",{ passId:trData.passId},function (data,status) {
-                    if (status=='success'){
-                        if (data.code==0){
-                            obj.del();
+                layer.confirm('确定要删除该条记录?', function(index){
+                    $.get("http://"+document.location.host+"/deleteRecordById",{ id:trData.id},function (data,status) {
+                        if (status=='success'){
+                            if (data.code==0){
+                                obj.del();
+                            }else {
+                                alert(status);
+                            }
+                        } else {
+                            alert(status);
                         }
-                        alert(data.msg);
-                    } else {
-                        alert(status);
-                    }
+                        layer.close(index);
+                    });
                 });
             }
             return;

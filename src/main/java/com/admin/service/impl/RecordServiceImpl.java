@@ -2,9 +2,9 @@ package com.admin.service.impl;
 
 import com.admin.dao.RecordDao;
 import com.admin.model.Record;
-import com.admin.ov.TableData;
+import com.admin.vo.TableData;
 import com.admin.service.RecordService;
-import com.admin.utils.CommonResult;
+import com.admin.vo.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,13 +31,23 @@ public class RecordServiceImpl implements RecordService {
 	
 	
 	@Override
-	public Object deleteRecordByPassId(int passId) {
-		if (recordDao.deleteRecordByPassId(passId)!=1)
-			return new CommonResult(-1,"删除记录失败",passId);
-		return new CommonResult(0,"删除记录成功",passId);
+	public Object deleteRecordById(int id) {
+		if (recordDao.deleteRecordById(id)!=1)
+			return new CommonResult(-1,"删除记录失败",id);
+		return new CommonResult(0,"删除记录成功",id);
+	}
+
+	@Override
+	public Object getAllRecordCount() {
+		int allRecordCount=recordDao.getAllRecordCount();
+		return new CommonResult(0,"获取全部通行数成功！",allRecordCount);
 	}
 	
-	
+	@Override
+	public Object getRecordCountByDeviceNumber(String deviceNumber) {
+		int recordCount=recordDao.getRecordCountByDeviceNumber(deviceNumber);
+		return new CommonResult(0,"获取通行记录数成功！",recordCount);
+	}
 	
 	@Override
 	public Object getRecords(int page, int limit) {
@@ -52,8 +62,8 @@ public class RecordServiceImpl implements RecordService {
 	}
 	
 	@Override
-	public Object getRecordsByUserCount(String userCount, int page, int limit) {
-		List<Record> records=recordDao.getRecordsByUserCount(userCount);
+	public Object getRecordsByUserAccount(String userAccount, int page, int limit) {
+		List<Record> records=recordDao.getRecordsByUserAccount(userAccount);
 		if (records.isEmpty())
 			return new TableData(-1,"没有通行记录",0,null);
 		if ((page-1)*limit>records.size())
@@ -100,7 +110,7 @@ public class RecordServiceImpl implements RecordService {
 	}
 
 	@Override
-	public Object getRecordsByState(char state, int page, int limit) {
+	public Object getRecordsByState(String state, int page, int limit) {
 		List<Record> records=recordDao.getRecordsByState(state);
 		if (records.isEmpty())
 			return new TableData(-1,"没有通行记录",0,null);

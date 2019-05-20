@@ -14,10 +14,7 @@
 
     <script src="../js/jquery.min.js"></script>
     <script src="../layui/layui.js"></script>
-
-    <script src="../js/admin/cookieTool.js"></script>
-    <script src="../js/admin/adminHome.js"></script>
-    <script src="../js/admin/adminlayer.js"></script>
+    <script src="../js/cookieTool.js"></script>
 
 </head>
 
@@ -36,7 +33,7 @@
             <li class="layui-nav-item">
                 <a id="user-name-a" href="javascript:;">李四</a>
                 <dl class="layui-nav-child">
-                    <dd><a href="javascript:;" onclick="showLayer('我的资料','adminData.html',350.4,355.4)">我的资料</a></dd>
+                    <dd><a href="javascript:;" onclick="showLayer('我的资料','adminInfor.html',350.4,360.4)">我的资料</a></dd>
                     <dd><a href="javascript:;" onclick="resetPassWord()">修改密码</a></dd>
                 </dl>
             </li>
@@ -48,12 +45,12 @@
     <!--左侧导航栏区域-->
     <div id="left-side" class="layui-side layui-bg-black">
         <ul id="left-side-nav" class="layui-nav layui-nav-tree">
-            <li class="layui-nav-item" onclick="sideItem_click('控制台','adminConsole.html',1)"><a>控制台</a></li>
-            <li class="layui-nav-item" onclick="showLayer('新增用户','adminAddUser.html',400,400)"><a>新增用户</a></li>
-            <li class="layui-nav-item" onclick="sideItem_click('管理用户','userManagement.html',3)"><a >管理用户</a></li>
-            <li class="layui-nav-item" onclick="sideItem_click('通行记录','passRecords.html',4)"><a >通行记录</a></li>
-            <li class="layui-nav-item" onclick="sideItem_click('系统消息','systemMessages.html',5)"><a>系统消息</a></li>
-            <li class="layui-nav-item" onclick="sideItem_click('系统设置','adminSystemSetting.html',6)"><a>系统设置</a></li>
+            <li class="layui-nav-item" onclick="sideItem_click('控制台','console.html',1)"><a>控制台</a></li>
+            <li class="layui-nav-item" onclick="showLayer('新增用户','addUser.html',400,400)"><a>新增用户</a></li>
+            <li class="layui-nav-item" onclick="sideItem_click('用户列表','userList.html',3)"><a >用户列表</a></li>
+            <li class="layui-nav-item" onclick="sideItem_click('通行记录','records.html',4)"><a >通行记录</a></li>
+            <li class="layui-nav-item" onclick="sideItem_click('系统消息','systemMsg.html',5)"><a>系统消息</a></li>
+            <li class="layui-nav-item" onclick="sideItem_click('系统设置','systemSetting.html',6)"><a>系统设置</a></li>
         </ul>
     </div>
 
@@ -65,22 +62,17 @@
             </ul>
             <div class="layui-tab-content" id="body-tab-content">
                 <div class="layui-tab-item layui-show">
-                    <iframe src='adminConsole.html' frameborder="0" class="content-tab-iframe"></iframe>
+                    <iframe src='console.html' frameborder="0" class="content-tab-iframe"></iframe>
                 </div>
             </div>
         </div>
     </div>
 
-    <!--底部区域-->
-    <div class="layui-footer">
-        © layui.com - 底部固定区域
-    </div>
-
 </div>
 <script>
+
     $(document).ready(function () {
         rfidAdmin=JSON.parse(getCookie("rfidAdmin"));
-        console.log(rfidAdmin);
         if (rfidAdmin==null){
             window.location.href="http://"+document.location.host+"/index.html";
             return;
@@ -90,7 +82,7 @@
             element = layui.element;
             layer=layui.layer;
         });
-        $('#user-name-a').text(rfidAdmin.adminName);
+        $('#user-name-a').text(rfidAdmin.name);
     });
 
     function logOut() {
@@ -108,15 +100,16 @@
                 layer.msg("新密码不能和旧密码一样！")
                 return;
             }
-            console.log(rfidAdmin);
-            $.get("http://"+document.location.host+"/modifyAdminPassWord",{ adminCount:rfidAdmin.adminCount,passWord:value},function (data,status) {
-                if (status=='success'){
+            $.get("http://"+document.location.host+"/modifyAdminPassWord",{ account:rfidAdmin.account,passWord:value},function (data,status) {
+                if (status!='success'){
+                    layer.msg(status);
+                    layer.close(index);
+                    return;
+                }else if (data.code==0){
                     rfidAdmin.password=value;
                     setCookie("rfidAdmin",JSON.stringify(rfidAdmin));
-                    layer.msg(data.msg);
-                } else {
-                    layer.msg(status);
                 }
+                layer.msg(data.msg);
                 layer.close(index);
             });
         });

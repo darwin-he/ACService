@@ -5,40 +5,38 @@ package com.admin.model;
  * @date 2019/5/7 0:35
  */
 public class Admin {
-private int adminId;
-private String adminCount;
-private String adminName;
-private String passWord;
-private String deviceNumber;
-private String province;
-private String city;
-private String county;
-private String community;
-private char state;
-private String registerTime;
+	private int id;
+	private String account;
+	private String name;
+	private String passWord;
+	private String deviceNumber;
+	private String deviceName;
+	private char type;
+	private String state;
+	private String registerTime;
 
-public int getAdminId() {
-	return adminId;
+public int getId() {
+	return id;
 }
 
-public void setAdminId(int adminId) {
-	this.adminId = adminId;
+public void setId(int id) {
+	this.id = id;
 }
 
-public String getAdminCount() {
-	return adminCount;
+public String getAccount() {
+	return account;
 }
 
-public void setAdminCount(String adminCount) {
-	this.adminCount = adminCount;
+public void setAccount(String account) {
+	this.account = account;
 }
 
-public String getAdminName() {
-	return adminName;
+public String getName() {
+	return name;
 }
 
-public void setAdminName(String adminName) {
-	this.adminName = adminName;
+public void setName(String name) {
+	this.name = name;
 }
 
 public String getPassWord() {
@@ -57,43 +55,27 @@ public void setDeviceNumber(String deviceNumber) {
 	this.deviceNumber = deviceNumber;
 }
 
-public String getProvince() {
-	return province;
+public String getDeviceName() {
+	return deviceName;
 }
 
-public void setProvince(String province) {
-	this.province = province;
+public void setDeviceName(String deviceName) {
+	this.deviceName = deviceName;
 }
 
-public String getCity() {
-	return city;
+public char getType() {
+	return type;
 }
 
-public void setCity(String city) {
-	this.city = city;
+public void setType(char type) {
+	this.type = type;
 }
 
-public String getCounty() {
-	return county;
-}
-
-public void setCounty(String county) {
-	this.county = county;
-}
-
-public String getCommunity() {
-	return community;
-}
-
-public void setCommunity(String community) {
-	this.community = community;
-}
-
-public char getState() {
+public String getState() {
 	return state;
 }
 
-public void setState(char state) {
+public void setState(String state) {
 	this.state = state;
 }
 

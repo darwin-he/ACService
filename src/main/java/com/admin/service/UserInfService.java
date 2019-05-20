@@ -7,47 +7,40 @@ import com.admin.model.User;
  * @date 2019/5/2 17:12
  */
 public interface UserInfService {
-
-	/*************************************用户归属************************************/
-	Object getLocation();
-	
 	/*************************************新增用户************************************/
 	Object addUser(User user);
 	
 	/*************************************删除用户************************************/
-	Object deleteUserByUserId(int userId);
+	Object deleteUserById(int id);
 	
-	Object deleteUserByUserCard(String userCard);
+	Object deleteUserByCardNumber(String cardNumber);
 	
-	Object deleteUserByUserCount(String userCount);
+	Object deleteUserByAccount(String account);
 	
 	/*************************************获取用户************************************/
+	Object getUserCount();
+	
 	Object getUser(int page,int limit);
 	
-	Object getUserByUserCard(String userCard);
+	Object getUserByCardNumber(String cardNumber);
 	
-	Object getUserByUserId(int userId);
+	Object getUserById(int id);
 	
-	Object getUserByUserCount(String userCount);
+	Object getUserByAccount(String account);
 	
-	Object getUsersByUserName(String userName,int page,int limit);
+	Object getUsersByName(String Name,int page,int limit);
 	
 	Object getUsersByDate(String leftDate,String rightDate,int page,int limit);
 	
-	Object getUsersByLocation(String province,String city,String county,String community,int page,int limit);
-	
 	/*************************************修改用户************************************/
-	Object modifyUser(User user);
-	
-	Object modifyUserPassWord(int userId,String passWord);
+	Object modifyUserPassWord(int id,String passWord);
 
-	Object modifyUserCard(int userId,String userCard);
+	Object modifyUserCardNumber(int id,String cardNumber);
 	
-	Object modifyUserName(int userId,String userName);
+	Object modifyUserName(int id,String userName);
 	
-	Object modifyUserState(int userId,char state);
+	Object modifyUserState(int id,String state);
 	
-	Object modifyUserCount(int userId,String userCount);
+	Object modifyUserAccount(int id,String account);
 	
-	Object modifyUserLocation(int userId, String province,String city, String county,String community);
 }

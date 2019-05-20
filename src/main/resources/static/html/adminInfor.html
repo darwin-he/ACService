@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
 
     <link rel="stylesheet" href="../layui/css/layui.css">
-    <script src="../js/admin/cookieTool.js"></script>
+    <script src="../js/cookieTool.js"></script>
     <script src="../js/jquery.min.js"></script>
     <script src="../layui/layui.js"></script>
 
@@ -25,13 +25,13 @@
     <div class="layui-row" id="adminImageDiv"style="margin-top: 10px">
         <div class="layui-col-xs12 "style="text-align: center">
             <div class="layui-col-xs12" style="text-align: center">
-                <img id="adminHeadImg" src="http://image3.suning.cn/uimg/b2c/newcatentries/0070183678-000000010180639122_3_800x800.jpg" class="layui-circle" width="60px" height="60px">
+                <img id="adminHeadImg" src="http://image3.suning.cn/uimg/b2c/newcatentries/0070183678-000000010180639122_3_800x800.jpg" class="layui-circle" width="80px" height="80px">
             </div>
         </div>
     </div>
 
 
-    <div class="layui-row" style="margin-top: 15px;">
+    <div class="layui-row" style="margin-top: 20px;">
         <div class="layui-col-xs12 "style="text-align: center">
             <div class="layui-col-xs6 "style="text-align: center">
                 账&nbsp;&nbsp;号
@@ -74,19 +74,9 @@
     <div class="layui-row" style="margin-top: 10px;">
         <div class="layui-col-xs12 "style="text-align: center">
             <div class="layui-col-xs6 "style="text-align: center">
-                区&nbsp;&nbsp;域
+                设备名
             </div>
-            <div id="location" class="layui-col-xs6 "style="text-align: center">
-            </div>
-        </div>
-    </div>
-
-    <div class="layui-row" style="margin-top: 10px;">
-        <div class="layui-col-xs12 "style="text-align: center">
-            <div class="layui-col-xs6 "style="text-align: center">
-                小&nbsp;&nbsp;区
-            </div>
-            <div id="community" class="layui-col-xs6 "style="text-align: center">
+            <div id="deviceName" class="layui-col-xs6 "style="text-align: center">
             </div>
         </div>
     </div>
@@ -108,17 +98,12 @@
             window.location.href="http://"+document.location.host+"/index.html";
             return;
         }
-        console.log(rfidAdmin);
-        $('#adminName').text(rfidAdmin.adminName);
-        $('#adminCount').text(rfidAdmin.adminCount);
+        $('#adminName').text(rfidAdmin.name);
+        $('#adminCount').text(rfidAdmin.account);
         $('#deviceNumber').text(rfidAdmin.deviceNumber);
-        $('#location').text(rfidAdmin.province+" "+rfidAdmin.city+" "+rfidAdmin.county);
-        $('#community').text(rfidAdmin.community);
+        $('#deviceName').text(rfidAdmin.deviceName);
+        $('#state').text(rfidAdmin.state);
         $('#registerTime').text(rfidAdmin.registerTime);
-        if (rfidAdmin.state=="1")
-            $('#state').text('可用');
-        else
-            $('#state').text('禁用');
     });
 </script>
 </body>

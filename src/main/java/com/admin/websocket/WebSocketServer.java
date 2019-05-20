@@ -3,6 +3,7 @@ package com.admin.websocket;
 import com.admin.service.UserInfService;
 import com.admin.websocket.msgdefin.CodeEnum;
 import com.admin.websocket.msgdefin.MsgResult;
+import com.admin.websocket.msgdefin.MsgRoute;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ import java.util.Map;
  */
 
 
-@ServerEndpoint(value = "/websocket")
+@ServerEndpoint(value = "/LocalService")
 @Component
 public class WebSocketServer {
     
@@ -39,6 +40,11 @@ public class WebSocketServer {
     
     //客户端列表
     private static Map<String,Session> clients=new HashMap<>();
+    
+    @OnOpen
+    public static void onOpen(Session session){
+        log.info("客户端连接:" + session.getId());
+    }
     
     /**
      * 连接断开时调用的方法
@@ -88,8 +94,12 @@ public class WebSocketServer {
     */
     private static void decodeServiceMsg(MsgResult msgResult, Session session) {
         int code=msgResult.getCode();
-        if (code== CodeEnum.GET_USERINFOR.getCode()){
-            //获取用户信息
+        if (code== CodeEnum.GET_USERINFOR.getCode()){//门禁设备验证用户信息
+            //查询用户信息
+            
+            //添加通行记录
+            
+            //用户信息
             MsgResult sendData=new MsgResult(msgResult.getMsgRoute(),CodeEnum.GET_USERINFOR_SUCCEDSS.getCode(), CodeEnum.GET_USERINFOR_SUCCEDSS.getMsg());
             sendMessage(sendData,session);
         }else if (code== CodeEnum.UPDATE_IDENTITY_INFOR.getCode()){//上传身份信息
@@ -98,9 +108,15 @@ public class WebSocketServer {
             clients.put(msgResult.getMsgRoute().getFrom(),session);
             MsgResult sendData=new MsgResult(msgResult.getMsgRoute(),CodeEnum.UPDATE_IDENTITY_INFOR_SUCCESS.getCode(), CodeEnum.GET_USERINFOR_SUCCEDSS.getMsg());
             sendMessage(sendData,session);
-        }else if (code== CodeEnum.UPDATE_ENVIRODATE.getCode()){//上传环境数据
+        }else if (code== CodeEnum.UPDATE_ENVIRODATE.getCode()){//上传环境数据(设备自动上传的)
             //保存环境数据到数据库
             
+            //转发给管理员
+            String deviceNumber=msgResult.getMsgRoute().getFrom();
+            Session sessionTo=clients.get("A"+deviceNumber.substring(1));
+            if (sessionTo!=null){
+                sendMessage(msgResult,sessionTo);
+            }
         }
     }
 

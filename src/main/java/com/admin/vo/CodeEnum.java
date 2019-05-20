@@ -1,4 +1,4 @@
-package com.admin.utils;
+package com.admin.vo;
 
 /**
  * \* Created with IntelliJ IDEA.

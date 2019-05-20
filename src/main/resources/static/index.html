@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" type="text/css" href="css/login.css">
 
-    <script src="js/admin/cookieTool.js"></script>
+    <script src="js/cookieTool.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="layui/layui.js"></script>
 </head>
@@ -22,6 +22,7 @@
             <input type="password" placeholder="密&nbsp;&nbsp;码：" id="passWord"/>
             <input type="password" placeholder="重复密码：" id="rePassWord"/>
             <input type="text" placeholder="设备编号：" id="deviceNumber"/>
+            <input type="text" placeholder="设备名：" id="deviceName"/>
             <button id="create">创&nbsp;&nbsp;建</button>
             <p class="message">已有账户? <a href="#">立刻登录</a></p>
         </form>
@@ -37,7 +38,6 @@
 </div>
 
 <script>
-
     function check_login() {
         var adminCount = $("#l-adminCount").val();
         var passWord = $("#l-passWord").val();
@@ -63,7 +63,7 @@
             type: "POST",
             url: "http://"+document.location.host+"/adminLogin",
             // contentType: "application/json; charset=utf-8",
-            data: {"adminCount":adminCount,"passWord":passWord},
+            data: {"account":adminCount,"passWord":passWord},
             dataType: "json",
             success: function (data) {
                 if (data.code==0){
@@ -88,6 +88,8 @@
         var passWord = $("#passWord").val();
         var rePassWord=$("#rePassWord").val();
         var deviceNumber=$('#deviceNumber').val();
+        var deviceName=$('#deviceName').val();
+
         if (adminCount.length!=11){
             $("#login_form").removeClass('shake_effect');
             setTimeout(function () {
@@ -132,7 +134,17 @@
             return;
         }
 
-        var sendData={"adminCount":adminCount,"adminName":adminName,"passWord":passWord,"deviceNumber":deviceNumber};
+        if (deviceName.length<2||deviceName.length>16){
+            $("#login_form").removeClass('shake_effect');
+            setTimeout(function () {
+                $("#login_form").addClass('shake_effect')
+            }, 1);
+            alert("设备名必须为2-16个字符");
+            return;
+        }
+
+        var sendData={"account":adminCount,"name":adminName,"passWord":passWord,
+            "deviceNumber":deviceNumber,"deviceName":deviceName};
         //异步请求服务器验证密码
         $.ajax({
             type: "POST",
@@ -147,7 +159,7 @@
                     $("#passWord").val("");
                     $("#rePassWord").val("");
                     $('#deviceNumber').val("");
-
+                    $('#deviceName').val("");
                 }
                 alert(data.msg)
             },
@@ -174,6 +186,10 @@
                 opacity: 'toggle'
             }, 'slow');
         });
+
+        rfidAdmin=JSON.parse(getCookie("rfidAdmin"));
+        if (rfidAdmin!=null)
+            window.location.href="http://"+document.location.host+"/html"+"/adminHome.html";
     })
 </script>
 

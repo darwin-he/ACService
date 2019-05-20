@@ -2,15 +2,15 @@ package com.admin.model;
 
 /**
  * @author darwin_he
- * @date 2019/5/2 1:56
+ * @date 2019/5/18 22:32
  */
-public class Record {
+public class EnviroData {
 	private int id;
-	private String userAccount;
-	private String userName;
 	private String deviceNumber;
 	private String deviceName;
-	private String state;
+	private float temperature;
+	private float humidity;
+	private int lightIntensity;
 	private String time;
 
 public int getId() {
@@ -19,22 +19,6 @@ public int getId() {
 
 public void setId(int id) {
 	this.id = id;
-}
-
-public String getUserAccount() {
-	return userAccount;
-}
-
-public void setUserAccount(String userAccount) {
-	this.userAccount = userAccount;
-}
-
-public String getUserName() {
-	return userName;
-}
-
-public void setUserName(String userName) {
-	this.userName = userName;
 }
 
 public String getDeviceNumber() {
@@ -53,12 +37,28 @@ public void setDeviceName(String deviceName) {
 	this.deviceName = deviceName;
 }
 
-public String getState() {
-	return state;
+public float getTemperature() {
+	return temperature;
 }
 
-public void setState(String state) {
-	this.state = state;
+public void setTemperature(float temperature) {
+	this.temperature = temperature;
+}
+
+public float getHumidity() {
+	return humidity;
+}
+
+public void setHumidity(float humidity) {
+	this.humidity = humidity;
+}
+
+public int getLightIntensity() {
+	return lightIntensity;
+}
+
+public void setLightIntensity(int lightIntensity) {
+	this.lightIntensity = lightIntensity;
 }
 
 public String getTime() {

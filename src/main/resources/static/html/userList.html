@@ -33,15 +33,15 @@
         </form>
       </div>
 
-      <div style="overflow-x:scroll">
+      <div>
         <table id="usersInfTable" class="layui-tab" lay-filter="usersInfTable-Event"></table>
       </div>
 
       <script type="text/html" id="usersInfTable-ToolBar">
-        <a class="layui-btn layui-btn-xs" lay-event="changeState">状态</a>
-        <a class="layui-btn layui-btn-xs" lay-event="resetPassWord">密码</a>
-        <a class="layui-btn layui-btn-xs" lay-event="changeCard">卡号</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+        <a class="layui-btn layui-btn-xs" lay-event="changeState">禁用启用</a>
+        <a class="layui-btn layui-btn-xs" lay-event="resetPassWord">修改密码</a>
+        <a class="layui-btn layui-btn-xs" lay-event="changeCard">更改卡号</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除用户</a>
       </script>
 
     </div>
@@ -65,20 +65,15 @@
         //初始化table
         table.render({
           elem: '#usersInfTable'
-          ,width:1466
           ,page: true //开启分页
           ,cols: [[ //表头
-                {field: 'userId', title: 'ID',width:'6%',align:'center',sort: true}
-                ,{field: 'userCount', title: '账号',width:'10%',align:'center',sort: true}
-                ,{field: 'userName', title: '昵称',width:'8%',align:'center',sort: true}
-                ,{field: 'userCard', title: '卡号',width:'8%',align:'center',sort: true}
-                ,{field: 'province', title: '省',width:'8%',align:'center',sort: true}
-                ,{field: 'city', title: '市',width:'8%',align:'center',sort: true}
-                ,{field: 'county', title: '县',width:'8%',align:'center',sort: true}
-                ,{field: 'community', title: '小区',width:'10%',align:'center',sort: true}
-                ,{field: 'registerTime', title: '注册时间',width:'12%',align:'center',sort: true}
-                ,{field: 'state', title: '状态',width:'7%',align:'center',sort: true}
-                ,{fixed: 'right',field: 'toolbar', title: '操作',width:'15%',align:'center',toolbar:'#usersInfTable-ToolBar'}
+                {field: 'id', title: 'ID',width:'10%',align:'center',sort: true}
+                ,{field: 'account', title: '账号',width:'12%',align:'center',sort: true}
+                ,{field: 'name', title: '用户名',width:'14%',align:'center',sort: true}
+                ,{field: 'cardNumber', title: '卡号',width:'12%',align:'center',sort: true}
+                ,{field: 'registerTime', title: '注册时间',width:'14%',align:'center',sort: true}
+                ,{field: 'state', title: '状态',width:'10%',align:'center',sort: true}
+                ,{fixed: 'right',field: 'toolbar', title: '操作',width:'28%',align:'center',toolbar:'#usersInfTable-ToolBar'}
             ]]
           ,url: "http://"+document.location.host+"/getUsers" //数据接口
           ,parseData: function(res){ //res 即为原始返回的数据
@@ -129,9 +124,9 @@
 
           if (data.field.userName!=""){
               table.reload("usersInfTable",{
-                  url: "http://"+document.location.host+"/getUsersByUserName" //数据接口
+                  url: "http://"+document.location.host+"/getUsersByName" //数据接口
                   ,where: { //设定异步数据接口的额外参数，任意设
-                      userName:data.field.userName
+                      name:data.field.userName
                   }
                   ,parseData: function(res){
                       if (res.code==0){
@@ -148,15 +143,15 @@
                           }
                       }
                   }
-              })
+              });
               return false;
           }
 
           if (data.field.userCount!=""){
               table.reload("usersInfTable",{
-                  url: "http://"+document.location.host+"/getUserByUserCount" //数据接口
+                  url: "http://"+document.location.host+"/getUserByAccount" //数据接口
                   ,where: { //设定异步数据接口的额外参数，任意设
-                      userCount:data.field.userCount
+                      account:data.field.userCount
                   }
                   ,parseData: function(res){
                       if (res.code==0){
@@ -176,6 +171,7 @@
               })
               return false;
           }
+
           table.reload("usersInfTable",{
               url: "http://"+document.location.host+"/getUsers" //数据接口
               ,parseData: function(res){ //res 即为原始返回的数据
@@ -205,11 +201,11 @@
 
           if (layEvent=='changeState') {
             var changeValue;
-            if (trData.state=='1')
-              changeValue=0;
+            if (trData.state=='可用')
+              changeValue='禁用';
             else
-              changeValue=1;
-            $.get("http://"+document.location.host+"/modifyUserState",{ userId:trData.userId,state:changeValue},function (data,status) {
+              changeValue='可用';
+            $.get("http://"+document.location.host+"/modifyUserState",{id:trData.id,state:changeValue},function (data,status) {
               if (status=='success'){
                 if (data.code==0){
                   obj.update({
@@ -226,11 +222,11 @@
 
           if(layEvent=='resetPassWord'){
               layer.prompt({formType:1, title: '请输入新密码',}, function(value, index, elem){
-                  if (value==""||value.length>16||value.length<6){
+                  if (value.length>16||value.length<6){
                       layer.msg("密码必须为6-16位字符")
                       return;
                   }
-                  $.get("http://"+document.location.host+"/modifyUserPassWord",{ userId:trData.userId,passWord:value},function (data,status) {
+                  $.get("http://"+document.location.host+"/modifyUserPassWord",{ id:trData.id,passWord:value},function (data,status) {
                       if (status=='success'){
                           layer.msg(data.msg);
                       } else {
@@ -243,44 +239,33 @@
           }
 
           if(layEvent=='changeCard'){
-              //读取新卡号
-              $.get("http://"+document.location.host+"/readCardNumber",function (data,status) {
-                  if (status=='success'){
-                      if (data.code==0){
-                          layer.prompt({formType:0, title: '卡号将修改为：',value:data.data.cardNumber}, function(value, index, elem){
-                              if (value==""||value.length!=8){
-                                  layer.msg("卡号必须为八位字符")
-                                  return;
-                              }
-                              //修改卡号
-                              $.get("http://"+document.location.host+"/modifyUserCard",{ userId:trData.userId,userCard:value},function (data,status) {
-                                  if (status=='success'){
-                                      if (data.code==0){
-                                          obj.update({
-                                              userCard:value
-                                          });
-                                      }
-                                      layer.msg(data.msg);
-                                  } else {
-                                      layer.msg(status);
-                                  }
-                                  layer.close(index);
-                              });
-                          });
-                      }else {
-                          layer.msg(data.msg);
-                      }
-                  } else {
-                      layer.msg(status);
+            layer.prompt({formType:1, title: '请输入新卡号',}, function(value, index, elem){
+              if (value.length!=8){
+                layer.msg("卡号必须为8位16进制字符")
+                return;
+              }
+              //修改卡号
+              $.get("http://"+document.location.host+"/modifyUserCardNumber",{ id:trData.id,cardNumber:value},function (data,status) {
+                if (status=='success'){
+                  if (data.code==0){
+                    obj.update({
+                      userCard:value
+                    });
                   }
+                  layer.msg(data.msg);
+                } else {
+                  layer.msg(status);
+                }
+                layer.close(index);
               });
+            });
             return;
           }
 
           if (layEvent=='delete'){
               layer.confirm('确定要删除改用户?', function(index){
                   //do something
-                  $.get("http://"+document.location.host+"/deleteUserByUserId",{ userId:trData.userId},function (data,status) {
+                  $.get("http://"+document.location.host+"/deleteUserById",{ id:trData.id},function (data,status) {
                       if (status=='success'){
                           if (data.code==0){
                               obj.del();
@@ -293,7 +278,6 @@
                   });
               });
           }
-
           return;
         })
       });

@@ -14,20 +14,24 @@ import java.util.List;
 @Component
 public interface RecordDao {
 	
-	@Insert({"insert into records (userCount,userName,deviceNumber,deviceName,state,time) " +
-			         "values (#{userCount},#{userName},#{deviceNumber},#{deviceName},#{state},#{time})"})
+	@Insert({"insert into records (userAccount,userName,deviceNumber,deviceName,state,time) " +
+			         "values (#{userAccount},#{userName},#{deviceNumber},#{deviceName},#{state},#{time})"})
 	int addRecord(Record record);
 	
-	@Delete({"delete from records where passId = #{passId}"})
-	int deleteRecordByPassId(@Param("passId")int passId);
+	@Delete({"delete from records where id = #{id}"})
+	int deleteRecordById(@Param("id")int id);
 	
+	@Select({"select count(*) from records where deviceNumber = #{deviceNumber}"})
+	int getRecordCountByDeviceNumber(@Param("deviceNumber")String deviceNumber);
 	
+	@Select({"select count(*) from records"})
+	int getAllRecordCount();
 	
 	@Select({"select * from records"})
 	List<Record> getRecords();
 	
-	@Select({"select * from records where userCount = #{userCount}"})
-	List<Record> getRecordsByUserCount(@Param("userCount")String userCount);
+	@Select({"select * from records where userAccount = #{userAccount}"})
+	List<Record> getRecordsByUserAccount(@Param("userAccount")String userAccount);
 	
 	@Select({"select * from records where userName like concat(concat('%',#{userName}),'%')"})
 	List<Record> getRecordsByUserName(@Param("userName")String userName);
@@ -39,7 +43,7 @@ public interface RecordDao {
 	List<Record> getRecordsByDeviceName(@Param("deviceName")String deviceName);
 	
 	@Select({"select * from records where state = #{state}"})
-	List<Record> getRecordsByState(@Param("state")char state);
+	List<Record> getRecordsByState(@Param("state")String state);
 	
 	@Select({"select * from records where time between #{leftDate} and #{rightDate}"})
 	List<Record> getRecordsByDate(@Param("leftDate")String leftDate,@Param("rightDate")String rightDate);

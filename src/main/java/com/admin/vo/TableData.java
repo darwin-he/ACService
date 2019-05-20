@@ -1,4 +1,4 @@
-package com.admin.ov;
+package com.admin.vo;
 
 /**
  * @author darwin_he

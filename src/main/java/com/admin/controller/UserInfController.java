@@ -1,9 +1,9 @@
 package com.admin.controller;
 
 import com.admin.model.User;
-import com.admin.ov.Location;
+import com.admin.vo.Location;
 import com.admin.service.UserInfService;
-import com.admin.utils.CommonResult;
+import com.admin.vo.CommonResult;
 import com.admin.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,41 +23,35 @@ public class UserInfController {
 	@ResponseBody
 	@RequestMapping(value = "/addUser",method = RequestMethod.POST)
 	public Object addUser(@RequestBody User user){
-		CommonResult result =(CommonResult) userInfService.getLocation();
-		if (result.getCode()==0){
-			Location location=(Location) result.getData();
-			user.setProvince(location.getProvince());
-			user.setCity(location.getCity());
-			user.setCounty(location.getCounty());
-			user.setCommunity(location.getCommunity());
-			user.setState('1');
-			user.setRegisterTime(TimeUtil.getCurrentTime());
-		}else {
-			return result;
-		}
 		return userInfService.addUser(user);
 	}
 	
 	/*************************************删除用户************************************/
 	@ResponseBody
-	@RequestMapping(value = "/deleteUserByUserId",method = RequestMethod.GET)
-	public Object deleteUserByUserId(@RequestParam(value = "userId")int userId){
-		return userInfService.deleteUserByUserId(userId);
+	@RequestMapping(value = "/deleteUserById",method = RequestMethod.GET)
+	public Object deleteUserByUserId(@RequestParam(value = "id")int id){
+		return userInfService.deleteUserById(id);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/deleteUserByUserCard",method = RequestMethod.GET)
-	public Object deleteUserByUserCard(@RequestParam(value = "userCard") String userCard){
-		return userInfService.deleteUserByUserCard(userCard);
+	@RequestMapping(value = "/deleteUserByCardNumber",method = RequestMethod.GET)
+	public Object deleteUserByUserCard(@RequestParam(value = "cardNumber") String cardNumber){
+		return userInfService.deleteUserByCardNumber(cardNumber);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/deleteUserByUserCount",method = RequestMethod.GET)
-	public Object deleteUserByUserCount(@RequestParam(value = "userCount")String userCount){
-		return userInfService.deleteUserByUserCount(userCount);
+	@RequestMapping(value = "/deleteUserByAccount",method = RequestMethod.GET)
+	public Object deleteUserByUserCount(@RequestParam(value = "account")String account){
+		return userInfService.deleteUserByAccount(account);
 	}
 	
 	/*************************************获取用户************************************/
+	@ResponseBody
+	@RequestMapping(value = "/getUserCount",method = RequestMethod.GET)
+	public Object getUserCount(){
+		return userInfService.getUserCount();
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/getUsers",method = RequestMethod.GET)
 	public Object getUsers(@RequestParam(value = "page")int page,@RequestParam(value = "limit")int limit){
@@ -65,28 +59,28 @@ public class UserInfController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/getUserByUserCard",method = RequestMethod.GET)
-	public Object getUserByUserCard(@RequestParam(value = "userCard") String userCard){
-		return userInfService.getUserByUserCard(userCard);
+	@RequestMapping(value = "/getUserByCardNumber",method = RequestMethod.GET)
+	public Object getUserByUserCard(@RequestParam(value = "cardNumber") String cardNumber){
+		return userInfService.getUserByCardNumber(cardNumber);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/getUserByUserId",method = RequestMethod.GET)
-	public Object getUserByUserId(@RequestParam(value = "userId")int userId){
-		return userInfService.getUserByUserId(userId);
+	@RequestMapping(value = "/getUserById",method = RequestMethod.GET)
+	public Object getUserByUserId(@RequestParam(value = "id")int id){
+		return userInfService.getUserById(id);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/getUserByUserCount",method = RequestMethod.GET)
-	public Object getUserByUserCount(@RequestParam(value = "userCount")String userCount){
-		return userInfService.getUserByUserCount(userCount);
+	@RequestMapping(value = "/getUserByAccount",method = RequestMethod.GET)
+	public Object getUserByUserCount(@RequestParam(value = "account")String account){
+		return userInfService.getUserByAccount(account);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/getUsersByUserName",method = RequestMethod.GET)
-	public Object getUsersByUserName(@RequestParam(value = "userName")String userName,
+	@RequestMapping(value = "/getUsersByName",method = RequestMethod.GET)
+	public Object getUsersByName(@RequestParam(value = "name")String name,
 	                                 @RequestParam(value = "page")int page,@RequestParam(value = "limit") int limit){
-		return userInfService.getUsersByUserName(userName,page,limit);
+		return userInfService.getUsersByName(name,page,limit);
 	}
 	
 	@ResponseBody
@@ -97,48 +91,35 @@ public class UserInfController {
 	}
 	
 	/*************************************修改用户************************************/
-	@ResponseBody
-	@RequestMapping(value = "/modifyUser",method = RequestMethod.GET)
-	public Object modifyUser(@RequestBody User user){
-		return userInfService.modifyUser(user);
-	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/modifyUserPassWord",method = RequestMethod.GET)
-	public Object modifyUserPassWord(@RequestParam(value = "userId")int userId, @RequestParam(value = "passWord")String passWord) {
-		return userInfService.modifyUserPassWord(userId,passWord);
+	public Object modifyUserPassWord(@RequestParam(value = "id")int id, @RequestParam(value = "passWord")String passWord) {
+		return userInfService.modifyUserPassWord(id,passWord);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/modifyUserCard",method = RequestMethod.GET)
-	public Object modifyUserCard(@RequestParam(value = "userId")int userId, @RequestParam(value = "userCard")String userCard) {
-		return userInfService.modifyUserCard(userId,userCard);
+	@RequestMapping(value = "/modifyUserCardNumber",method = RequestMethod.GET)
+	public Object modifyUserCard(@RequestParam(value = "id")int id, @RequestParam(value = "cardNumber")String userCard) {
+		return userInfService.modifyUserCardNumber(id,userCard);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/modifyUserName",method = RequestMethod.GET)
-	public Object modifyUserName(@RequestParam(value = "userId")int userId, @RequestParam(value = "userName")String userName) {
+	public Object modifyUserName(@RequestParam(value = "id")int userId, @RequestParam(value = "userName")String userName) {
 		return userInfService.modifyUserName(userId,userName);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/modifyUserState",method = RequestMethod.GET)
-	public Object modifyUserState(@RequestParam(value = "userId")int userId, @RequestParam(value = "state")char state) {
-		return userInfService.modifyUserState(userId,state);
+	public Object modifyUserState(@RequestParam(value = "id")int id, @RequestParam(value = "state")String state) {
+		return userInfService.modifyUserState(id,state);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/modifyUserCount",method = RequestMethod.GET)
-	public Object modifyUserCount(@RequestParam(value = "userId")int userId, @RequestParam(value = "userCount")String userCount) {
-		return userInfService.modifyUserCount(userId,userCount);
-	}
-	
-	@ResponseBody
-	@RequestMapping(value = "/modifyUserLocation",method = RequestMethod.GET)
-	public Object modifyUserLocation(@RequestParam(value = "userId")int userId, @RequestParam(value = "province")String province,
-	                                 @RequestParam(value = "city")String city, @RequestParam(value = "county")String county,
-	                                 @RequestParam(value = "community")String community) {
-		return userInfService.modifyUserLocation(userId,province,city,county,community);
+	@RequestMapping(value = "/modifyUserAccount",method = RequestMethod.GET)
+	public Object modifyUserCount(@RequestParam(value = "id")int id, @RequestParam(value = "account")String userCount) {
+		return userInfService.modifyUserAccount(id,userCount);
 	}
 	
 }
