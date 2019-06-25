@@ -1,7 +1,10 @@
 package com.admin.controller;
 
+import com.admin.model.Device;
 import com.admin.service.DeviceService;
+import com.admin.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,5 +23,8 @@ public class DeviceController {
 		return deviceService.getDeviceCount();
 	}
 	
-	
+	@RequestMapping(value = "/addDevice",method = RequestMethod.POST)
+	public Object addDevice(@RequestBody Device device){
+		return deviceService.addDevice(device);
+	}
 }

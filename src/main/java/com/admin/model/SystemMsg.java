@@ -6,9 +6,18 @@ package com.admin.model;
  */
 public class SystemMsg {
 	private int id;
+	private String title;
 	private String msg;
-	private char msgType;
+	private String msgType;
 	private String createTime;
+
+public String getTitle() {
+	return title;
+}
+
+public void setTitle(String title) {
+	this.title = title;
+}
 
 public int getId() {
 	return id;
@@ -26,11 +35,11 @@ public void setMsg(String msg) {
 	this.msg = msg;
 }
 
-public char getMsgType() {
+public String getMsgType() {
 	return msgType;
 }
 
-public void setMsgType(char msgType) {
+public void setMsgType(String msgType) {
 	this.msgType = msgType;
 }
 

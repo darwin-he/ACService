@@ -21,4 +21,9 @@ public class SystemController {
 		return systemService.getLocation();
 	}
 	
+	@RequestMapping(value = "/getSystemMsgByMsgId",method = RequestMethod.GET)
+	public Object getSystemMsgByMsgId(@RequestParam("id") int id){
+		return systemService.getSystemMsgByMsgId(id);
+	}
+	
 }

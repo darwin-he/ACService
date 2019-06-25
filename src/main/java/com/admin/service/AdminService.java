@@ -12,4 +12,14 @@ public interface AdminService {
 	Object adminLogin(String account,String passWord);
 	
 	Object addAdmin(Admin admin);
+	
+	Object getAdminByDeviceNumber(String deviceNumber);
+	
+	Object getAdminMsgs(String account,int page,int limit);
+	
+	Object modifyAdminMsgStateByMsId(int id,String state);
+	
+	Object deleteAdminMsgByMsgId(int id);
+	
+	Object getAdminMsgByDate(String account,int page,int limit,String leftDate,String rightDate);
 }

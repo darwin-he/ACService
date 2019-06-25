@@ -1,6 +1,7 @@
 package com.admin.dao;
 
 import com.admin.model.EnviroData;
+import com.admin.model.SystemMsg;
 import com.admin.vo.Location;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -18,4 +19,7 @@ import java.util.List;
 public interface SystemDao {
 	@Select({"select province,city,county,community from systeminfor where id = '1'"})
 	Location getLocation();
+	
+	@Select({"select * from systemmsg where id = #{id}"})
+	SystemMsg getSystemMsgByMsgId(int id);
 }

@@ -6,4 +6,5 @@ package com.admin.service;
  */
 public interface SystemService {
 	Object getLocation();
+	Object getSystemMsgByMsgId(int id);
 }

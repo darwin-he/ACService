@@ -7,7 +7,7 @@ package com.admin.model;
 public class EnviroData {
 	private int id;
 	private String deviceNumber;
-	private String deviceName;
+	private String deviceNikeName;
 	private float temperature;
 	private float humidity;
 	private int lightIntensity;
@@ -29,12 +29,12 @@ public void setDeviceNumber(String deviceNumber) {
 	this.deviceNumber = deviceNumber;
 }
 
-public String getDeviceName() {
-	return deviceName;
+public String getDeviceNikeName() {
+	return deviceNikeName;
 }
 
-public void setDeviceName(String deviceName) {
-	this.deviceName = deviceName;
+public void setDeviceNikeName(String deviceNikeName) {
+	this.deviceNikeName = deviceNikeName;
 }
 
 public float getTemperature() {

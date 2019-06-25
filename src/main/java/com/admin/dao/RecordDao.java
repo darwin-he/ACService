@@ -14,8 +14,8 @@ import java.util.List;
 @Component
 public interface RecordDao {
 	
-	@Insert({"insert into records (userAccount,userName,deviceNumber,deviceName,state,time) " +
-			         "values (#{userAccount},#{userName},#{deviceNumber},#{deviceName},#{state},#{time})"})
+	@Insert({"insert into records (userAccount,userName,deviceNumber,deviceNikeName,state,time) " +
+			         "values (#{userAccount},#{userName},#{deviceNumber},#{deviceNikeName},#{state},#{time})"})
 	int addRecord(Record record);
 	
 	@Delete({"delete from records where id = #{id}"})
@@ -39,8 +39,8 @@ public interface RecordDao {
 	@Select({"select * from records where deviceNumber = #{deviceNumber}"})
 	List<Record> getRecordsByDeviceNumber(@Param("deviceNumber")String deviceNumber);
 	
-	@Select({"select * from records where deviceName like concat(concat('%',#{deviceName}),'%')"})
-	List<Record> getRecordsByDeviceName(@Param("deviceName")String deviceName);
+	@Select({"select * from records where deviceNikeName like concat(concat('%',#{deviceNikeName}),'%')"})
+	List<Record> getRecordsByDeviceNikeName(@Param("deviceNikeName")String deviceNikeName);
 	
 	@Select({"select * from records where state = #{state}"})
 	List<Record> getRecordsByState(@Param("state")String state);

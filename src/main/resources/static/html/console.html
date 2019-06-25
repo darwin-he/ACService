@@ -175,16 +175,27 @@
                 <tbody>
                 <tr>
                     <th>设备编号</th>
-                    <td>10010103403</td></tr>
+                    <td id="deviceNumber"></td>
+                </tr>
                 <tr>
                     <th>设备名称</th>
-                    <td>RFID智能门禁终端</td></tr>
+                    <td id="deviceName"></td>
+                </tr>
                 <tr>
                     <th>操作系统</th>
-                    <td>Raspbian</td></tr>
+                    <td id="osName"></td>
+                </tr>
                 <tr>
                     <th>运行环境</th>
-                    <td>JVM(64)</td>
+                    <td id="runTimeEnviro"></td>
+                </tr>
+                <tr>
+                    <th>内存大小</th>
+                    <td id="memorySize"></td>
+                </tr>
+                <tr>
+                    <th>剩余内存</th>
+                    <td id="remainderMemory"></td>
                 </tr>
                 </tbody>
             </table>
@@ -192,7 +203,6 @@
     </fieldset>
 
 </div>
-
 <script>
     //WebSocket相关
     var webSocketUrl="ws://"+document.location.host+"/LocalService";
@@ -375,10 +385,12 @@
                 }
             ]
         };
-        //getCurrentDayEnvirDataForEcharts();
+        //获取当日的环境数据
+        getCurrentDayEnvirDataForEcharts();
     });
 
     function onWebSocketOpen(event){
+        webSocketIsReady=true;
         //创建消息路由
         msgRouteToService={to:"LocalService",from:"A"+rfidAdmin.deviceNumber};
         msgRouteToDevice={to:"D"+rfidAdmin.deviceNumber,from:"A"+rfidAdmin.deviceNumber};
@@ -388,22 +400,11 @@
 
     function onWebSocketError(event) {
         webSocketIsReady=false;
-        $('#connectState').text("已断开");
-        $('#doorState').text("未知");
-        $('#rfidState').text("未知");
-        $('#graState').text("未知");
-        $('#touchState').text("未知");
-        $('#enviroState').text("未知");
-
-        $('#currentTemperature').text("未知");
-        $('#currentHumidity').text("未知");
-        $('#currentLight').text("未知");
-        alert("与设备的连接发生异常，请尝试刷新页面解决该问题");
     }
 
     function onWebSocketClose(closeEvent){
         webSocketIsReady=false;
-        $('#connectState').text("已断开");
+        $('#connectState').text("未连接");
         $('#doorState').text("未知");
         $('#rfidState').text("未知");
         $('#graState').text("未知");
@@ -413,13 +414,14 @@
         $('#currentTemperature').text("未知");
         $('#currentHumidity').text("未知");
         $('#currentLight').text("未知");
-        alert("与设备的连接中断，请尝试刷新页面解决该问题");
+        alert("与设备的连接中断");
     }
 
     function onWebSocketMessage(messageEvent){
-        var msgData=messageEvent.data;
+        var msgData=JSON.parse(messageEvent.data);
         switch (msgData.code) {
             case 26://设备传送门禁状态数据成功
+                $('#connectState').text("已连接");
                 $('#doorState').text(msgData.data.doorState);
                 $('#rfidState').text(msgData.data.rfidState);
                 $('#graState').text(msgData.data.graState);
@@ -427,6 +429,7 @@
                 $('#enviroState').text(msgData.data.enviroState);
                 break;
             case 25://设备传送门禁状态数据失败
+                $('#connectState').text("已连接");
                 $('#doorState').text("未知");
                 $('#rfidState').text("未知");
                 $('#graState').text("未知");
@@ -452,13 +455,12 @@
                 alert("卡号："+msgData.data.userCard);
                 break;
             case 16://设备上传卡片数据失败！
-                alert("读卡失败成功！");
+                alert("读卡失败！");
                 break;
             case 4://开门成功！
                 $('#doorState').text("开启");
                 break;
             case 3://开门失败！
-                $('#doorState').text("异常");
                 alert("开门失败！");
                 //通知设备上状态信息
                 updataDeviceState();
@@ -467,7 +469,6 @@
                 $('#doorState').text("关闭");
                 break;
             case 6://关门失败！
-                $('#doorState').text("异常");
                 alert("关门失败！");
                 //通知设备上状态信息
                 updataDeviceState();
@@ -493,25 +494,51 @@
                 updateDeviceInfor();
                 break;
             case 20://身份验证成功！
-                webSocketIsReady=true;
                 //do something
-                //通知设备上状态信息
-                updataDeviceState();
-                //通知设备上传实时环境数据
-                updateEnviroData();
-                //通知设备上传设备信息
-                updateDeviceInfor();
                 break;
             case 19://身份验证失败！
-                webSocketIsReady=false;
-                alert("连接设备失败！");
+                alert("连接服务器失败！");
                 break;
             case 34://设备上传设备信息成功
                 //do something
-
+                $('#deviceNumber').text(msgData.data.deviceNumber);
+                $('#deviceName').text(msgData.data.deviceName);
+                $('#osName').text(msgData.data.osName);
+                $('#runTimeEnviro').text(msgData.data.runTimeEnviro);
+                $('#memorySize').text(msgData.data.memorySize);
+                $('#remainderMemory').text(msgData.data.remainderMemory);
                 break;
             case 35://设备上传设备信息失败
+                $('#deviceNumber').text("未知");
+                $('#deviceName').text("未知");
+                $('#osName').text("未知");
+                $('#runTimeEnviro').text("未知");
+                $('#memorySize').text("未知");
+                $('#remainderMemory').text("未知");
                 alert("获取设备信息失败！");
+                break;
+            case 101://设备已连接（来自服务器的消息通知）
+                updataDeviceState();
+                updateEnviroData();
+                updateDeviceInfor();
+                break;
+            case 100://设备连接断开（来自服务器的消息通知）
+                $('#connectState').text("已断开");
+                $('#doorState').text("未知");
+                $('#rfidState').text("未知");
+                $('#graState').text("未知");
+                $('#touchState').text("未知");
+                $('#enviroState').text("未知");
+                $('#currentTemperature').text("未知");
+                $('#currentHumidity').text("未知");
+                $('#currentLight').text("未知");
+                $('#deviceNumber').text("未知");
+                $('#deviceName').text("未知");
+                $('#osName').text("未知");
+                $('#runTimeEnviro').text("未知");
+                $('#memorySize').text("未知");
+                $('#remainderMemory').text("未知");
+            default:
                 break;
         }
     }
@@ -546,11 +573,11 @@
     }
 
     function updataDeviceState() {
-        sendMsgByWebSocket({msgRoute:msgRouteToDevice,code:24,msg:"开门！",data:''});
+        sendMsgByWebSocket({msgRoute:msgRouteToDevice,code:24,msg:"上传门禁状态数据！",data:''});
     }
 
     function updateDeviceInfor() {
-        sendMsgByWebSocket({msgRoute:msgRouteToDevice,code:33,msg:"开门！",data:''});
+        sendMsgByWebSocket({msgRoute:msgRouteToDevice,code:33,msg:"上传设备信息！",data:''});
     }
 
     //为Echarts图获取当日环境数据，并更新数据。
@@ -595,6 +622,5 @@
         });
     }
 </script>
-
 </body>
 </html>

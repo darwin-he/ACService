@@ -1,6 +1,7 @@
 package com.admin.dao;
 
 import com.admin.model.EnviroData;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -21,4 +22,8 @@ List<EnviroData> getEnviroDataByDeviceNumberInPeriod(@Param("deviceNumber") Stri
 
 @Select({"select *,max(time) from envirodata where deviceNumber = #{deviceNumber}"})
 EnviroData getCurrentEnviroDataByDeviceNumber(@Param("deviceNumber") String deviceNumber);
+
+@Insert({"insert into envirodata (deviceNumber,deviceNikeName,temperature,humidity,lightIntensity,time)" +
+		         "values (#{deviceNumber},#{deviceNikeName},#{temperature},#{humidity},#{lightIntensity},#{time})"})
+int addErviroData(EnviroData enviroData);
 }

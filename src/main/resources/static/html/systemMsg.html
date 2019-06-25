@@ -1,10 +1,256 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>系统消息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../layui/layui.js"></script>
+    <script src="../js/cookieTool.js"></script>
+
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
-<body>
-<p>我的消息</p>
+<body class="layui-anim layui-anim-up">
+<div class="x-body">
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+            <input id="start" class="layui-input" placeholder="开始日" name="start" style="width:150px">
+            <input id="end" class="layui-input" placeholder="截止日" name="end" style="width:150px">
+            <button class="layui-btn"  lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+    </div>
+
+    <div>
+        <table id="usersInfTable" class="layui-tab" lay-filter="usersInfTable-Event"></table>
+    </div>
+
+    <script type="text/html" id="usersInfTable-ToolBar">
+        <a class="layui-btn layui-btn-xs" lay-event="overlook">查看</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    </script>
+
+</div>
+<script>
+    $(document).ready(function () {
+        rfidAdmin=JSON.parse(getCookie("rfidAdmin"));
+        if (rfidAdmin==null){
+            window.location.href="http://"+document.location.host+"/index.html";
+            return;
+        }
+        //加载组件
+        layui.use(['element','table','form','layer','laydate'],function() {
+            element = layui.element;
+            table=layui.table;
+            form = layui.form;
+            layer = layui.layer;
+            laydate = layui.laydate;
+
+            //设置日期控件
+            laydate.render({
+                elem: '#start' //指定元素
+            });
+            laydate.render({
+                elem: '#end' //指定元素
+            });
+
+            //初始化table
+            table.render({
+                elem: '#usersInfTable'
+                ,page: true //开启分页
+                ,cols: [[ //表头
+                    {field: 'id', title: 'ID',width:'8%',align:'center'}
+                    ,{field: 'msgId', title: 'MD',width:'8%',align:'center'}
+                    ,{field: 'title', title: '标题',width:'42%',align:'center'}
+                    ,{field: 'createTime', title: '时间',width:'16%',align:'center',sort: true}
+                    ,{field: 'state', title: '状态',width:'10%',align:'center',sort: true}
+                    ,{field: 'toolbar', title: '操作',width:'16%',align:'center',toolbar:'#usersInfTable-ToolBar'}
+                ]]
+                ,url: "http://"+document.location.host+"/getAdminMsgs" //数据接口
+                ,where: { //设定异步数据接口的额外参数，任意设
+                    account:rfidAdmin.account
+                }
+                ,parseData: function(res){ //res 即为原始返回的数据
+                    if (res.code==0){
+                        return {
+                            "code": res.code, //解析接口状态
+                            "msg": res.msg, //解析提示文本
+                            "count": res.totalCount, //解析数据长度
+                            "data": res.data //解析数据列表
+                        }
+                    }else {
+                        return {
+                            "code": res.code, //解析接口状态
+                            "msg": res.msg, //解析提示文本
+                        }
+                    }
+                }
+            });
+
+            //监听form
+            form.on('submit(search)', function(data){
+
+                if (data.field.start!=""&&data.field.end!=""){
+                    table.reload("usersInfTable",{
+                        url: "http://"+document.location.host+"/getAdminMsgByDate" //数据接口
+                        ,where: { //设定异步数据接口的额外参数，任意设
+                            account:rfidAdmin.account,
+                            leftDate:data.field.start,
+                            rightDate:data.field.end
+                        }
+                        ,parseData: function(res){
+                            if (res.code==0){
+                                return {
+                                    "code":res.code, //解析接口状态
+                                    "msg": res.msg, //解析提示文本
+                                    "count": res.totalCount, //解析数据长度
+                                    "data": res.data //解析数据列表
+                                }
+                            }else {
+                                return {
+                                    "code": res.code, //解析接口状态
+                                    "msg":res.msg, //解析提示文本
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                }
+
+                table.reload("usersInfTable",{
+                    url: "http://"+document.location.host+"/getAdminMsgs" //数据接口
+                    ,where: { //设定异步数据接口的额外参数，任意设
+                        account:rfidAdmin.account
+                    }
+                    ,parseData: function(res){ //res 即为原始返回的数据
+                        if (res.code==0){
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.totalCount, //解析数据长度
+                                "data": res.data //解析数据列表
+                            }
+                        }else {
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                            }
+                        }
+                    }
+                });
+                return false;
+            });
+
+            //监听table工具条事件
+            table.on('tool(usersInfTable-Event)',function (obj) {
+                var trData=obj.data;//获取当前行数据
+                var layEvent=obj.event;//获取lay-event对应的值
+                var tr=obj.tr;//获取当前行tr的DOM对象
+                if(layEvent=='overlook'){
+                    //获取消息全部内容
+                    $.get("http://"+document.location.host+"/getSystemMsgByMsgId",{ id:trData.msgId},function (data,status) {
+                        if (status=='success'){
+                            if (data.code==0){
+                                if (trData.state=='未读'){
+                                    //修改消息状态
+                                    $.get("http://"+document.location.host+"/modifyAdminMsgStateByMsId",{ id:trData.id,state:'已读'},function (data,status) {
+                                        if (status=='success'){
+                                            if (data.code==0){
+                                                obj.update({
+                                                    state:'已读'
+                                                });
+                                            }else{
+                                                layer.msg(data.msg);
+                                            }
+                                        } else {
+                                            layer.msg(status);
+                                        }
+                                    });
+                                }
+                                if (data.data.msgType=='text'){
+                                    layer.open({
+                                        title: data.data.title
+                                        ,resize:true
+                                        ,content: data.data.msg
+                                    });
+                                } else if (data.data.msgType=="html"){
+                                    showLayer(data.data.title,data.data.msg,900,500);
+                                } else if (data.data.msgType=='image'){
+                                    showLayer(data.data.title,data.data.msg,720,340);
+                                } else {
+                                    layer.msg('消息类型错误！');
+                                }
+                            }else {
+                                layer.msg(data.msg);
+                            }
+                        } else {
+                            layer.msg(status);
+                        }
+                    });
+                    return;
+                }
+
+                if (layEvent=='delete'){
+                    layer.confirm('确定要删除该消息?', function(index){
+                        //do something
+                        $.get("http://"+document.location.host+"/deleteAdminMsgByMsId",{ id:trData.id},function (data,status) {
+                            if (status=='success'){
+                                if (data.code==0){
+                                    obj.del();
+                                }
+                                layer.msg(data.msg);
+                            } else {
+                                layer.msg(status);
+                            }
+                            layer.close(index);
+                        });
+                    });
+                    return;
+                }
+            })
+        });
+    });
+
+    /*打开弹出框*/
+    function showLayer(title, url, w, h) {
+        if (title == null || title == '') {
+            title = false;
+        }
+        if (url == null || url == '') {
+            url = "404.html";
+        }
+        if (w == null || w == '') {
+            w = ($(window).width() * 0.9);
+        }
+        if (h == null || h == '') {
+            h = ($(window).height() - 50);
+        }
+        layer.open({
+            type: 2,
+            area: [w + 'px', h + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            scrollbar: false,
+            shadeClose: true,
+            shade: 0.3,
+            title: title,
+            content: url
+        });
+    }
+</script>
+
 </body>
+
+<img id="openImg" src="" style="width: ">
+
 </html>

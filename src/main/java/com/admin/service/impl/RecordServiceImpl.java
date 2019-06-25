@@ -98,8 +98,8 @@ public class RecordServiceImpl implements RecordService {
 	}
 
 	@Override
-	public Object getRecordsByDeviceName(String deviceName, int page, int limit) {
-		List<Record> records=recordDao.getRecordsByDeviceName(deviceName);
+	public Object getRecordsByDeviceNikeName(String deviceNikeName, int page, int limit) {
+		List<Record> records=recordDao.getRecordsByDeviceNikeName(deviceNikeName);
 		if (records.isEmpty())
 			return new TableData(-1,"没有通行记录",0,null);
 		if ((page-1)*limit>records.size())

@@ -29,7 +29,7 @@
             <input id="end" class="layui-input" placeholder="截止日" name="end">
             <input id="userName" class="layui-input" placeholder="用户名" type="text" name="userName" autocomplete="off">
             <input id="userCount" class="layui-input" placeholder="账&nbsp;号" type="text" name="userAccount" autocomplete="off">
-            <input id="deviceName" class="layui-input" placeholder="设备名" type="text" name="deviceName" autocomplete="off">
+            <input id="deviceName" class="layui-input" placeholder="设备昵称" type="text" name="deviceName" autocomplete="off">
             <input id="deviceNumber" class="layui-input" placeholder="设备编号" type="text" name="deviceNumber" autocomplete="off">
             <input id="state" class="layui-input" placeholder="状态:进/出" type="text" name="state" autocomplete="off">
             <button class="layui-btn"  lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
@@ -68,8 +68,8 @@
                 {field: 'id', title: 'ID',width:'8%',align:'center',sort: true}
                 ,{field: 'userAccount', title: '账号',width:'14%',align:'center',}
                 ,{field: 'userName', title: '用户名',width:'15%',align:'center',sort: true}
-                ,{field: 'deviceNumber', title: '设备号',width:'14%',align:'center',sort: true}
-                ,{field: 'deviceName', title: '设备名',width:'15%',align:'center',sort: true}
+                ,{field: 'deviceNumber', title: '设备编号',width:'14%',align:'center',sort: true}
+                ,{field: 'deviceNikeName', title: '设备昵称',width:'15%',align:'center',sort: true}
                 ,{field: 'time', title: '时间',width:'18%',align:'center',sort: true}
                 ,{field: 'state', title: '状态',width:'8%',align:'center',sort: true}
                 ,{field: 'toolbar', title: '操作',width:'8%',align:'center',toolbar:'#usersInfTable-ToolBar'}
@@ -174,9 +174,9 @@
             if (data.field.deviceName!=""){
                 //所获得的 tableIns 即为当前容器的实例
                 table.reload("usersInfTable",{
-                    url: "http://"+document.location.host+"/getRecordsByDeviceName" //数据接口
+                    url: "http://"+document.location.host+"/getRecordsByDeviceNikeName" //数据接口
                     ,where: { //设定异步数据接口的额外参数，任意设
-                        deviceName:data.field.deviceName
+                        deviceNikeName:data.field.deviceName
                     }
                     ,parseData: function(res){
                         if (res.code==0){

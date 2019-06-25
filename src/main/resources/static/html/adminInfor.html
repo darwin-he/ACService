@@ -84,6 +84,16 @@
     <div class="layui-row" style="margin-top: 10px;">
         <div class="layui-col-xs12 "style="text-align: center">
             <div class="layui-col-xs6 "style="text-align: center">
+                设备昵称
+            </div>
+            <div id="deviceNikeName" class="layui-col-xs6 "style="text-align: center">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-row" style="margin-top: 10px;">
+        <div class="layui-col-xs12 "style="text-align: center">
+            <div class="layui-col-xs6 "style="text-align: center">
                 注册时间
             </div>
             <div id="registerTime" class="layui-col-xs6 "style="text-align: center">
@@ -102,6 +112,7 @@
         $('#adminCount').text(rfidAdmin.account);
         $('#deviceNumber').text(rfidAdmin.deviceNumber);
         $('#deviceName').text(rfidAdmin.deviceName);
+        $('#deviceNikeName').text(rfidAdmin.deviceNikeName);
         $('#state').text(rfidAdmin.state);
         $('#registerTime').text(rfidAdmin.registerTime);
     });

@@ -1,6 +1,7 @@
 package com.admin.service.impl;
 
 import com.admin.dao.SystemDao;
+import com.admin.model.SystemMsg;
 import com.admin.service.SystemService;
 import com.admin.vo.CommonResult;
 import com.admin.vo.Location;
@@ -23,5 +24,12 @@ public class SystemServiceImpl implements SystemService {
 			return new CommonResult(-1,"获取设备区域信息失败！");
 		return new CommonResult(0,"获取设备区域信息成功！",location);
 	}
-	
+
+	@Override
+	public Object getSystemMsgByMsgId(int id) {
+		SystemMsg systemMsg=systemDao.getSystemMsgByMsgId(id);
+		if (systemMsg!=null)
+			return new CommonResult(0,"获取系统消息成功！",systemMsg);
+		return new CommonResult(-1,"获取系统消息失败！");
+	}
 }

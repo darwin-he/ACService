@@ -2,16 +2,15 @@ package com.admin.model;
 
 /**
  * @author darwin_he
- * @date 2019/5/2 1:56
+ * @date 2019/5/28 19:32
  */
-public class Record {
+public class Device {
 	private int id;
-	private String userAccount;
-	private String userName;
 	private String deviceNumber;
+	private String deviceName;
 	private String deviceNikeName;
 	private String state;
-	private String time;
+	private String registerTime;
 
 public int getId() {
 	return id;
@@ -21,28 +20,20 @@ public void setId(int id) {
 	this.id = id;
 }
 
-public String getUserAccount() {
-	return userAccount;
-}
-
-public void setUserAccount(String userAccount) {
-	this.userAccount = userAccount;
-}
-
-public String getUserName() {
-	return userName;
-}
-
-public void setUserName(String userName) {
-	this.userName = userName;
-}
-
 public String getDeviceNumber() {
 	return deviceNumber;
 }
 
 public void setDeviceNumber(String deviceNumber) {
 	this.deviceNumber = deviceNumber;
+}
+
+public String getDeviceName() {
+	return deviceName;
+}
+
+public void setDeviceName(String deviceName) {
+	this.deviceName = deviceName;
 }
 
 public String getDeviceNikeName() {
@@ -61,11 +52,11 @@ public void setState(String state) {
 	this.state = state;
 }
 
-public String getTime() {
-	return time;
+public String getRegisterTime() {
+	return registerTime;
 }
 
-public void setTime(String time) {
-	this.time = time;
+public void setRegisterTime(String registerTime) {
+	this.registerTime = registerTime;
 }
 }

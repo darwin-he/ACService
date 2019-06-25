@@ -23,6 +23,7 @@
             <input type="password" placeholder="重复密码：" id="rePassWord"/>
             <input type="text" placeholder="设备编号：" id="deviceNumber"/>
             <input type="text" placeholder="设备名：" id="deviceName"/>
+            <input type="text" placeholder="设备昵称：" id="deviceNikeName"/>
             <button id="create">创&nbsp;&nbsp;建</button>
             <p class="message">已有账户? <a href="#">立刻登录</a></p>
         </form>
@@ -89,6 +90,7 @@
         var rePassWord=$("#rePassWord").val();
         var deviceNumber=$('#deviceNumber').val();
         var deviceName=$('#deviceName').val();
+        var deviceNikeName=$('#deviceNikeName').val();
 
         if (adminCount.length!=11){
             $("#login_form").removeClass('shake_effect');
@@ -143,8 +145,17 @@
             return;
         }
 
+        if (deviceNikeName.length<2||deviceNikeName.length>16){
+            $("#login_form").removeClass('shake_effect');
+            setTimeout(function () {
+                $("#login_form").addClass('shake_effect')
+            }, 1);
+            alert("设备昵称必须为2-16个字符");
+            return;
+        }
+
         var sendData={"account":adminCount,"name":adminName,"passWord":passWord,
-            "deviceNumber":deviceNumber,"deviceName":deviceName};
+            "deviceNumber":deviceNumber,"deviceName":deviceName,"deviceNikeName":deviceNikeName};
         //异步请求服务器验证密码
         $.ajax({
             type: "POST",
@@ -160,6 +171,7 @@
                     $("#rePassWord").val("");
                     $('#deviceNumber').val("");
                     $('#deviceName').val("");
+                    $('#deviceNikeName').val("");
                 }
                 alert(data.msg)
             },

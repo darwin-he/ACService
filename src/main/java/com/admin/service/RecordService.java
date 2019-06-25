@@ -26,7 +26,7 @@ public interface RecordService {
 	
 	Object getRecordsByDeviceNumber(String deviceNumber,int page,int limit);
 
-	Object getRecordsByDeviceName(String deviceName,int page,int limit);
+	Object getRecordsByDeviceNikeName(String deviceNikeName,int page,int limit);
 	
 	Object getRecordsByState(String state,int page,int limit);
 	

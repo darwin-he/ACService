@@ -82,10 +82,10 @@ public class RecordController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/getRecordsByDeviceName",method = RequestMethod.GET)
-	public Object getRecordsByDeviceName(@RequestParam(value = "deviceName")String deviceName,
+	@RequestMapping(value = "/getRecordsByDeviceNikeName",method = RequestMethod.GET)
+	public Object getRecordsByDeviceName(@RequestParam(value = "deviceNikeName")String deviceNikeName,
 	                                     @RequestParam(value = "page")int page,@RequestParam(value = "limit")int limit){
-		return recordService.getRecordsByDeviceName(deviceName,page,limit);
+		return recordService.getRecordsByDeviceNikeName(deviceNikeName,page,limit);
 	}
 	
 	@ResponseBody
