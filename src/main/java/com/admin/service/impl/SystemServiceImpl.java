@@ -14,22 +14,22 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SystemServiceImpl implements SystemService {
-	@Autowired
-	private SystemDao systemDao;
-	
-	@Override
-	public Object getLocation() {
-		Location location=systemDao.getLocation();
-		if (location==null)
-			return new CommonResult(-1,"获取设备区域信息失败！");
-		return new CommonResult(0,"获取设备区域信息成功！",location);
-	}
+    @Autowired
+    private SystemDao systemDao;
 
-	@Override
-	public Object getSystemMsgByMsgId(int id) {
-		SystemMsg systemMsg=systemDao.getSystemMsgByMsgId(id);
-		if (systemMsg!=null)
-			return new CommonResult(0,"获取系统消息成功！",systemMsg);
-		return new CommonResult(-1,"获取系统消息失败！");
-	}
+    @Override
+    public Object getLocation() {
+        Location location = systemDao.getLocation();
+        if (location == null)
+            return new CommonResult(-1, "获取设备区域信息失败！");
+        return new CommonResult(0, "获取设备区域信息成功！", location);
+    }
+
+    @Override
+    public Object getSystemMsgByMsgId(int id) {
+        SystemMsg systemMsg = systemDao.getSystemMsgByMsgId(id);
+        if (systemMsg != null)
+            return new CommonResult(0, "获取系统消息成功！", systemMsg);
+        return new CommonResult(-1, "获取系统消息失败！");
+    }
 }

@@ -5,85 +5,85 @@ package com.admin.model;
  * @date 2019/5/18 22:46
  */
 public class SystemInfor {
-	private int id;
-	private String number;
-	private String name;
-	private String province;
-	private String city;
-	private String county;
-	private String community;
-	private int deviceCount;
-	private String registerTime;
-	
-public int getDeviceCount() {
-	return deviceCount;
-}
+    private int id;
+    private String number;
+    private String name;
+    private String province;
+    private String city;
+    private String county;
+    private String community;
+    private int deviceCount;
+    private String registerTime;
 
-public void setDeviceCount(int deviceCount) {
-	this.deviceCount = deviceCount;
-}
+    public int getDeviceCount() {
+        return deviceCount;
+    }
 
-public int getId() {
-	return id;
-}
+    public void setDeviceCount(int deviceCount) {
+        this.deviceCount = deviceCount;
+    }
 
-public void setId(int id) {
-	this.id = id;
-}
+    public int getId() {
+        return id;
+    }
 
-public String getNumber() {
-	return number;
-}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-public void setNumber(String number) {
-	this.number = number;
-}
+    public String getNumber() {
+        return number;
+    }
 
-public String getName() {
-	return name;
-}
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
-public void setName(String name) {
-	this.name = name;
-}
+    public String getName() {
+        return name;
+    }
 
-public String getProvince() {
-	return province;
-}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-public void setProvince(String province) {
-	this.province = province;
-}
+    public String getProvince() {
+        return province;
+    }
 
-public String getCity() {
-	return city;
-}
+    public void setProvince(String province) {
+        this.province = province;
+    }
 
-public void setCity(String city) {
-	this.city = city;
-}
+    public String getCity() {
+        return city;
+    }
 
-public String getCounty() {
-	return county;
-}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-public void setCounty(String county) {
-	this.county = county;
-}
+    public String getCounty() {
+        return county;
+    }
 
-public String getCommunity() {
-	return community;
-}
+    public void setCounty(String county) {
+        this.county = county;
+    }
 
-public void setCommunity(String community) {
-	this.community = community;
-}
+    public String getCommunity() {
+        return community;
+    }
 
-public String getRegisterTime() {
-	return registerTime;
-}
+    public void setCommunity(String community) {
+        this.community = community;
+    }
 
-public void setRegisterTime(String registerTime) {
-	this.registerTime = registerTime;
-}
+    public String getRegisterTime() {
+        return registerTime;
+    }
+
+    public void setRegisterTime(String registerTime) {
+        this.registerTime = registerTime;
+    }
 }

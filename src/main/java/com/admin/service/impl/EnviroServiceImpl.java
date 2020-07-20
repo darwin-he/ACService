@@ -19,53 +19,53 @@ import java.util.List;
  */
 @Service
 public class EnviroServiceImpl implements EnviroService {
-	@Autowired
-	private EnviroDao enviroDao;
+    @Autowired
+    private EnviroDao enviroDao;
 
-	@Override
-	public Object getCurrentDayEnviroDataByDeviceNumberForEchart(String deviceNumber) {
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-		String time=df.format(new Date());// new Date()为获取当前系统时间
+    @Override
+    public Object getCurrentDayEnviroDataByDeviceNumberForEchart(String deviceNumber) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        String time = df.format(new Date());// new Date()为获取当前系统时间
 //		String startTime=time.substring(0,11)+"00:00:00";
 //		String endTime=time.substring(0,11)+"23:59:59";
-		String startTime="2019-05-18 00:00:00";
-		String endTime="2019-05-18 23:59:59";
-		List<EnviroData> enviroDataList=enviroDao.getEnviroDataByDeviceNumberInPeriod(deviceNumber,startTime,endTime);
-		if (enviroDataList.isEmpty())
-			return new CommonResult(-1,"无今日环境数据！");
-		List<String> timeList=new ArrayList<>();
-		List<Float> temperatureData=new ArrayList<>();
-		List<Float> humidityData=new ArrayList<>();
-		List<Integer> lightData=new ArrayList<>();
-		for (int i=0;i<enviroDataList.size();i++){
-			EnviroData enviroData=enviroDataList.get(i);
-			timeList.add(enviroData.getTime().substring(11,16));
-			temperatureData.add(enviroData.getTemperature());
-			humidityData.add(enviroData.getHumidity());
-			lightData.add(enviroData.getLightIntensity());
-		}
-		EnviroDataForEchart enviroDataVo=new EnviroDataForEchart();
-		enviroDataVo.setTimeList(timeList);
-		enviroDataVo.setTemperatureData(temperatureData);
-		enviroDataVo.setHumidityData(humidityData);
-		enviroDataVo.setLightData(lightData);
-		return new CommonResult(0,"获取当日环境数据成功！",enviroDataVo);
-	}
+        String startTime = "2019-05-18 00:00:00";
+        String endTime = "2019-05-18 23:59:59";
+        List<EnviroData> enviroDataList = enviroDao.getEnviroDataByDeviceNumberInPeriod(deviceNumber, startTime, endTime);
+        if (enviroDataList.isEmpty())
+            return new CommonResult(-1, "无今日环境数据！");
+        List<String> timeList = new ArrayList<>();
+        List<Float> temperatureData = new ArrayList<>();
+        List<Float> humidityData = new ArrayList<>();
+        List<Integer> lightData = new ArrayList<>();
+        for (int i = 0; i < enviroDataList.size(); i++) {
+            EnviroData enviroData = enviroDataList.get(i);
+            timeList.add(enviroData.getTime().substring(11, 16));
+            temperatureData.add(enviroData.getTemperature());
+            humidityData.add(enviroData.getHumidity());
+            lightData.add(enviroData.getLightIntensity());
+        }
+        EnviroDataForEchart enviroDataVo = new EnviroDataForEchart();
+        enviroDataVo.setTimeList(timeList);
+        enviroDataVo.setTemperatureData(temperatureData);
+        enviroDataVo.setHumidityData(humidityData);
+        enviroDataVo.setLightData(lightData);
+        return new CommonResult(0, "获取当日环境数据成功！", enviroDataVo);
+    }
 
-	@Override
-	public Object getCurrentEnviroDataByDeviceNumber(String deviceNumber) {
-		EnviroData enviroData=enviroDao.getCurrentEnviroDataByDeviceNumber(deviceNumber);
-		if (enviroData==null)
-			return new CommonResult(-1,"获取最新环境数据失败！");
-		return new CommonResult(0,"获取最新环境数据成功！",enviroData);
-	}
+    @Override
+    public Object getCurrentEnviroDataByDeviceNumber(String deviceNumber) {
+        EnviroData enviroData = enviroDao.getCurrentEnviroDataByDeviceNumber(deviceNumber);
+        if (enviroData == null)
+            return new CommonResult(-1, "获取最新环境数据失败！");
+        return new CommonResult(0, "获取最新环境数据成功！", enviroData);
+    }
 
-	@Override
-	public Object addErviroData(EnviroData enviroData) {
-		int addResult=enviroDao.addErviroData(enviroData);
-		if (addResult==1)
-			return new CommonResult(0,"新增环境数据成功！");
-		else
-			return new CommonResult(-1,"新增环境数据失败！");
-	}
+    @Override
+    public Object addErviroData(EnviroData enviroData) {
+        int addResult = enviroDao.addErviroData(enviroData);
+        if (addResult == 1)
+            return new CommonResult(0, "新增环境数据成功！");
+        else
+            return new CommonResult(-1, "新增环境数据失败！");
+    }
 }

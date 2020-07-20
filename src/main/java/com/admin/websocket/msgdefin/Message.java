@@ -8,21 +8,22 @@ package com.admin.websocket.msgdefin;
  * \* Description:
  * \
  */
-public class MsgResult {
-    private MsgRoute msgRoute;
-    private int code = CodeEnum.SUCCESS.getCode();
-    private String msg = CodeEnum.SUCCESS.getMsg();
+public class Message {
+    private Route route;
+    private int code = Code.SUCCESS.getCode();
+    private String msg = Code.SUCCESS.getMsg();
     private Object data = "";
-    
 
-    public MsgResult() {}
 
-    public MsgResult(MsgRoute msgRoute, int code, String msg) {
-        this(msgRoute,code, msg, "");
+    public Message() {
     }
 
-    public MsgResult(MsgRoute msgRoute, int code, String msg, Object data) {
-        this.msgRoute=msgRoute;
+    public Message(Route route, int code, String msg) {
+        this(route, code, msg, "");
+    }
+
+    public Message(Route route, int code, String msg, Object data) {
+        this.route = route;
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -31,28 +32,33 @@ public class MsgResult {
     public int getCode() {
         return code;
     }
+
     public void setCode(int code) {
         this.code = code;
     }
+
     public String getMsg() {
         return msg;
     }
+
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
     public Object getData() {
         return data;
     }
+
     public void setData(Object data) {
         this.data = data;
     }
-    
-    public MsgRoute getMsgRoute() {
-        return msgRoute;
+
+    public Route getRoute() {
+        return route;
     }
-    
-    public void setMsgRoute(MsgRoute msgRoute) {
-        this.msgRoute = msgRoute;
+
+    public void setRoute(Route route) {
+        this.route = route;
     }
-    
+
 }

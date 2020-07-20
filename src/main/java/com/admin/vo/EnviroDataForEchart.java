@@ -7,47 +7,47 @@ import java.util.List;
  * @date 2019/5/19 3:43
  */
 public class EnviroDataForEchart {
-	
-	private List<Float> temperatureData;
-	
-	private List<Float> humidityData;
-	
-	private List<Integer> lightData;
 
-	private List<String> timeList;
+    private List<Float> temperatureData;
 
-public List<String> getTimeList() {
-	return timeList;
-}
+    private List<Float> humidityData;
 
-public void setTimeList(List<String> timeList) {
-	this.timeList = timeList;
-}
+    private List<Integer> lightData;
 
-public List<Float> getTemperatureData() {
-	return temperatureData;
-}
+    private List<String> timeList;
 
-public void setTemperatureData(List<Float> temperatureData) {
-	this.temperatureData = temperatureData;
-}
+    public List<String> getTimeList() {
+        return timeList;
+    }
 
+    public void setTimeList(List<String> timeList) {
+        this.timeList = timeList;
+    }
 
-public List<Float> getHumidityData() {
-	return humidityData;
-}
+    public List<Float> getTemperatureData() {
+        return temperatureData;
+    }
 
-public void setHumidityData(List<Float> humidityData) {
-	this.humidityData = humidityData;
-}
+    public void setTemperatureData(List<Float> temperatureData) {
+        this.temperatureData = temperatureData;
+    }
 
 
-public List<Integer> getLightData() {
-	return lightData;
-}
+    public List<Float> getHumidityData() {
+        return humidityData;
+    }
 
-public void setLightData(List<Integer> lightData) {
-	this.lightData = lightData;
-}
+    public void setHumidityData(List<Float> humidityData) {
+        this.humidityData = humidityData;
+    }
+
+
+    public List<Integer> getLightData() {
+        return lightData;
+    }
+
+    public void setLightData(List<Integer> lightData) {
+        this.lightData = lightData;
+    }
 
 }

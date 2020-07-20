@@ -395,7 +395,7 @@
         msgRouteToService={to:"LocalService",from:"A"+rfidAdmin.deviceNumber};
         msgRouteToDevice={to:"D"+rfidAdmin.deviceNumber,from:"A"+rfidAdmin.deviceNumber};
         //发送身份验证消息
-        sendMsgByWebSocket({msgRoute:msgRouteToService,code:18,msg:"上传身份信息！",data:''})
+        sendMsgByWebSocket({route:msgRouteToService,code:18,msg:"上传身份信息！",data:''})
     }
 
     function onWebSocketError(event) {
@@ -549,35 +549,35 @@
     }
 
     function openDoor() {
-        sendMsgByWebSocket({msgRoute:msgRouteToDevice,code:2,msg:"开门！",data:''});
+        sendMsgByWebSocket({route:msgRouteToDevice,code:2,msg:"开门！",data:''});
     }
 
     function closeDoor() {
-        sendMsgByWebSocket({msgRoute:msgRouteToDevice,code:5,msg:"关门！",data:''});
+        sendMsgByWebSocket({route:msgRouteToDevice,code:5,msg:"关门！",data:''});
     }
 
     function readCard() {
-        sendMsgByWebSocket({msgRoute:msgRouteToDevice,code:15,msg:"上传卡片数据！",data:''});
+        sendMsgByWebSocket({route:msgRouteToDevice,code:15,msg:"上传卡片数据！",data:''});
     }
 
     function resetDevice() {
-        sendMsgByWebSocket({msgRoute:msgRouteToDevice,code:9,msg:"复位设备！",data:''});
+        sendMsgByWebSocket({route:msgRouteToDevice,code:9,msg:"复位设备！",data:''});
     }
 
     function cleanDevice() {
-        sendMsgByWebSocket({msgRoute:msgRouteToDevice,code:12,msg:"清理日志信息！",data:''});
+        sendMsgByWebSocket({route:msgRouteToDevice,code:12,msg:"清理日志信息！",data:''});
     }
 
     function updateEnviroData() {
-        sendMsgByWebSocket({msgRoute:msgRouteToDevice,code:21,msg:"上传环境数据！",data:''});
+        sendMsgByWebSocket({route:msgRouteToDevice,code:21,msg:"上传环境数据！",data:''});
     }
 
     function updataDeviceState() {
-        sendMsgByWebSocket({msgRoute:msgRouteToDevice,code:24,msg:"上传门禁状态数据！",data:''});
+        sendMsgByWebSocket({route:msgRouteToDevice,code:24,msg:"上传门禁状态数据！",data:''});
     }
 
     function updateDeviceInfor() {
-        sendMsgByWebSocket({msgRoute:msgRouteToDevice,code:33,msg:"上传设备信息！",data:''});
+        sendMsgByWebSocket({route:msgRouteToDevice,code:33,msg:"上传设备信息！",data:''});
     }
 
     //为Echarts图获取当日环境数据，并更新数据。

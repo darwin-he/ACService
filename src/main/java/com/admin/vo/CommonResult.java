@@ -14,7 +14,8 @@ public class CommonResult {
     private String msg = CodeEnum.SUCCESS.getMsg();
     private Object data = "";
 
-    public CommonResult() {}
+    public CommonResult() {
+    }
 
     public CommonResult(Object data) {
         this(CodeEnum.SUCCESS, data);
@@ -41,20 +42,25 @@ public class CommonResult {
     public int getCode() {
         return code;
     }
+
     public void setCode(int code) {
         this.code = code;
     }
+
     public String getMsg() {
         return msg;
     }
+
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
     public Object getData() {
         return data;
     }
+
     public void setData(Object data) {
         this.data = data;
     }
-    
+
 }
