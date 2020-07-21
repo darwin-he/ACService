@@ -1,6 +1,4 @@
-package com.admin.websocket.msgdefin;
-
-import com.admin.websocket.deviceDataModel.UserCard;
+package com.admin.websocket.deviceDataModel;
 
 public class Handle {
     private UserCard userCard;
@@ -10,6 +8,7 @@ public class Handle {
     public Handle(UserCard userCard, String handle, String deviceNumber) {
         this.userCard = userCard;
         this.handle = handle;
+        this.deviceNumber = deviceNumber;
     }
 
     public UserCard getUserCard() {

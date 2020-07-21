@@ -418,15 +418,19 @@
     }
 
     function onWebSocketMessage(messageEvent){
-        var msgData=JSON.parse(messageEvent.data);
-        switch (msgData.code) {
-            case 26://设备传送门禁状态数据成功
+        var message = JSON.parse(messageEvent.data);
+        var msgData = null;
+        if (message.data !== "") {
+            msgData=JSON.parse(message.data);
+        }
+        switch (message.code) {
+            case 24://设备传送门禁状态数据成功
                 $('#connectState').text("已连接");
-                $('#doorState').text(msgData.data.doorState);
-                $('#rfidState').text(msgData.data.rfidState);
-                $('#graState').text(msgData.data.graState);
-                $('#touchState').text(msgData.data.touchState);
-                $('#enviroState').text(msgData.data.enviroState);
+                $('#doorState').text(msgData.doorState);
+                $('#rfidState').text(msgData.rfidState);
+                $('#graState').text(msgData.graState);
+                $('#touchState').text(msgData.touchState);
+                $('#enviroState').text(msgData.enviroState);
                 break;
             case 25://设备传送门禁状态数据失败
                 $('#connectState').text("已连接");
@@ -437,10 +441,10 @@
                 $('#enviroState').text("未知");
                 alert("获取设备状态异常！");
                 break;
-            case 23://设备传送环境数据成功！
-                $('#currentTemperature').text(msgData.data.temperature+"℃");
-                $('#currentHumidity').text(msgData.data.humidity+"%");
-                $('#currentLight').text(msgData.data.lightIntensity+"Lux");
+            case 21://设备传送环境数据成功！
+                $('#currentTemperature').text(msgData.temperature+"℃");
+                $('#currentHumidity').text(msgData.humidity+"%");
+                $('#currentLight').text(msgData.lightIntensity+"Lux");
                 getCurrentDayEnvirDataForEcharts();
                 break;
             case 22://设备传送环境数据失败！
@@ -452,7 +456,7 @@
                 updataDeviceState();
                 break;
             case 17://设备传送卡片数据成功！
-                alert("卡号："+msgData.data.userCard);
+                alert("卡号："+msgData.userCard);
                 break;
             case 16://设备上传卡片数据失败！
                 alert("读卡失败！");
@@ -499,14 +503,14 @@
             case 19://身份验证失败！
                 alert("连接服务器失败！");
                 break;
-            case 34://设备上传设备信息成功
+            case 33://设备上传设备信息成功
                 //do something
-                $('#deviceNumber').text(msgData.data.deviceNumber);
-                $('#deviceName').text(msgData.data.deviceName);
-                $('#osName').text(msgData.data.osName);
-                $('#runTimeEnviro').text(msgData.data.runTimeEnviro);
-                $('#memorySize').text(msgData.data.memorySize);
-                $('#remainderMemory').text(msgData.data.remainderMemory);
+                $('#deviceNumber').text(msgData.deviceNumber);
+                $('#deviceName').text(msgData.deviceName);
+                $('#osName').text(msgData.osName);
+                $('#runTimeEnviro').text(msgData.runTimeEnviro);
+                $('#memorySize').text(msgData.memorySize);
+                $('#remainderMemory').text(msgData.remainderMemory);
                 break;
             case 35://设备上传设备信息失败
                 $('#deviceNumber').text("未知");
